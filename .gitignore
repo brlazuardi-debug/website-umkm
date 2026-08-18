@@ -25,3 +25,12 @@ dist-ssr
 .kiro/
 .windsurf/
 .augment/
+.opencode/
+.qoder/
+.roo/
+.trae/
+.github/
+
+# Stray tool artifacts / downloads (not part of project)
+awesome-design-md/
+mcp.json
