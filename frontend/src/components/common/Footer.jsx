@@ -2,7 +2,7 @@ import React from 'react';
 import { useBrand } from '../../context/BrandContext';
 import { Mail, Phone, MapPin, Globe } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+export const Footer = () => {
   const { brand } = useBrand();
 
   return (
@@ -81,4 +81,5 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+
 export default Footer;

@@ -3,11 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { useBrand } from '../../context/BrandContext';
 
-interface RouteProps {
-  children: React.ReactNode;
-}
-
-export const ProtectedRoute: React.FC<RouteProps> = ({ children }) => {
+export const ProtectedRoute = ({ children }) => {
   const { isSignedIn, isLoaded } = useAuth();
 
   if (!isLoaded) {
@@ -25,7 +21,7 @@ export const ProtectedRoute: React.FC<RouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-export const AdminRoute: React.FC<RouteProps> = ({ children }) => {
+export const AdminRoute = ({ children }) => {
   const { isSignedIn, isLoaded } = useAuth();
   const { isAdminDemo } = useBrand();
 
@@ -52,4 +48,5 @@ export const AdminRoute: React.FC<RouteProps> = ({ children }) => {
   // Untuk MVP, bypass demo atau signed-in user diasumsikan lulus di tahap frontend.
   return <>{children}</>;
 };
+
 export default ProtectedRoute;

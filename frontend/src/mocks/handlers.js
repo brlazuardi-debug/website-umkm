@@ -1,8 +1,7 @@
 import { http, HttpResponse } from 'msw';
-import type { ProdukResponse, TransaksiResponse, UserResponse } from '../types';
 
 // Mock Databases lokal di memory
-let mockProducts: ProdukResponse[] = [
+let mockProducts = [
   {
     id: 'c1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c',
     nama: 'Batik Tulis Mega Mendung Premium',
@@ -46,10 +45,10 @@ let mockProducts: ProdukResponse[] = [
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-  }
+  },
 ];
 
-let mockUser: UserResponse = {
+let mockUser = {
   id: 'e0a123b4-5678-4abc-9def-123456789abc',
   clerk_id: 'user_2Tj9KL8MnoPQrs',
   email: 'customer.umkm@gmail.com',
@@ -58,7 +57,7 @@ let mockUser: UserResponse = {
   updated_at: new Date().toISOString(),
 };
 
-let mockTransactions: Record<string, TransaksiResponse> = {};
+let mockTransactions = {};
 
 // Helper base URL matching Vite env variable or default
 const BASE_URL = '*/api/v1';
@@ -74,17 +73,21 @@ export const handlers = [
     const url = new URL(request.url);
     const limit = parseInt(url.searchParams.get('limit') || '20');
     const offset = parseInt(url.searchParams.get('offset') || '0');
+    // Admin memakai ?include_inactive=true untuk mengelola produk non-aktif.
+    // Default (tanpa param) hanya mengembalikan produk aktif, sesuai kontrak publik.
+    const includeInactive = url.searchParams.get('include_inactive') === 'true';
 
-    // Filter aktif jika bukan admin (untuk simulasi, kita kembalikan produk aktif)
-    const activeProducts = mockProducts.filter(p => p.is_active);
-    const paginated = activeProducts.slice(offset, offset + limit);
+    const source = includeInactive
+      ? mockProducts
+      : mockProducts.filter((p) => p.is_active);
+    const paginated = source.slice(offset, offset + limit);
     return HttpResponse.json(paginated);
   }),
 
   // 3. GET /products/{id}
   http.get(`${BASE_URL}/products/:id`, ({ params }) => {
     const { id } = params;
-    const product = mockProducts.find(p => p.id === id);
+    const product = mockProducts.find((p) => p.id === id);
     if (!product) {
       return new HttpResponse(null, { status: 404 });
     }
@@ -93,8 +96,8 @@ export const handlers = [
 
   // 4. POST /products (Admin)
   http.post(`${BASE_URL}/products`, async ({ request }) => {
-    const body: any = await request.json();
-    const newProduct: ProdukResponse = {
+    const body = await request.json();
+    const newProduct = {
       id: crypto.randomUUID(),
       nama: body.nama,
       deskripsi: body.deskripsi || null,
@@ -103,7 +106,7 @@ export const handlers = [
       gambar_url: body.gambar_url || 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300',
       is_active: body.is_active !== undefined ? body.is_active : true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
     mockProducts.push(newProduct);
     return HttpResponse.json(newProduct, { status: 201 });
@@ -112,8 +115,8 @@ export const handlers = [
   // 5. PUT /products/{id} (Admin)
   http.put(`${BASE_URL}/products/:id`, async ({ params, request }) => {
     const { id } = params;
-    const body: any = await request.json();
-    const index = mockProducts.findIndex(p => p.id === id);
+    const body = await request.json();
+    const index = mockProducts.findIndex((p) => p.id === id);
     if (index === -1) {
       return new HttpResponse(null, { status: 404 });
     }
@@ -126,7 +129,7 @@ export const handlers = [
       stok: body.stok !== undefined ? body.stok : mockProducts[index].stok,
       gambar_url: body.gambar_url !== undefined ? body.gambar_url : mockProducts[index].gambar_url,
       is_active: body.is_active !== undefined ? body.is_active : mockProducts[index].is_active,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
     return HttpResponse.json(mockProducts[index]);
   }),
@@ -134,7 +137,7 @@ export const handlers = [
   // 6. DELETE /products/{id} (Admin)
   http.delete(`${BASE_URL}/products/:id`, ({ params }) => {
     const { id } = params;
-    const index = mockProducts.findIndex(p => p.id === id);
+    const index = mockProducts.findIndex((p) => p.id === id);
     if (index === -1) {
       return new HttpResponse(null, { status: 404 });
     }
@@ -149,7 +152,7 @@ export const handlers = [
 
   // 8. PATCH /users/me
   http.patch(`${BASE_URL}/users/me`, async ({ request }) => {
-    const body: any = await request.json();
+    const body = await request.json();
     if (body.name !== undefined) {
       mockUser.name = body.name || '';
       mockUser.updated_at = new Date().toISOString();
@@ -159,11 +162,11 @@ export const handlers = [
 
   // 9. POST /transactions (Checkout)
   http.post(`${BASE_URL}/transactions`, async ({ request }) => {
-    const body: any = await request.json();
+    const body = await request.json();
     const txId = crypto.randomUUID();
     const midtransOrderId = `MOCK-ORDER-${Date.now()}`;
 
-    const newTx: TransaksiResponse = {
+    const newTx = {
       id: txId,
       user_id: mockUser.id,
       total_harga: body.total_harga,
@@ -173,7 +176,7 @@ export const handlers = [
       // QR server mockup API yang menampilkan teks order ID
       qr_url: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=MIDTRANS-MOCK-PAYLOAD-${midtransOrderId}`,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     mockTransactions[txId] = newTx;
@@ -193,10 +196,10 @@ export const handlers = [
   // 10. GET /transactions/{id} (Polling)
   http.get(`${BASE_URL}/transactions/:id`, ({ params }) => {
     const { id } = params;
-    const tx = mockTransactions[id as string];
+    const tx = mockTransactions[id];
     if (!tx) {
       return new HttpResponse(null, { status: 404 });
     }
     return HttpResponse.json(tx);
-  })
+  }),
 ];

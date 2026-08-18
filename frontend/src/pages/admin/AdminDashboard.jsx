@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts, deleteProduct } from '../../api/products';
-import type { ProdukResponse } from '../../types';
 import { Plus, Edit3, Trash2, Check, X, Eye, Package } from 'lucide-react';
 
-export const AdminDashboard: React.FC = () => {
-  const [products, setProducts] = useState<ProdukResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export const AdminDashboard = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchAllProducts = async () => {
     try {
       setLoading(true);
-      // Di admin, kita load limit 100 untuk ringkasan katalog penuh
-      const data = await getProducts(100, 0);
+      // Di admin, kita load seluruh katalog (termasuk non-aktif) untuk manajemen penuh
+      const data = await getProducts(100, 0, true);
       setProducts(data);
     } catch (err) {
       console.error('Error fetching admin products:', err);
@@ -27,7 +26,7 @@ export const AdminDashboard: React.FC = () => {
     fetchAllProducts();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (!window.confirm('Apakah Anda yakin ingin menghapus produk ini secara permanen dari katalog?')) {
       return;
     }
@@ -41,11 +40,11 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const formatPrice = (num: number) => {
+  const formatPrice = (num) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(num);
   };
 
@@ -115,7 +114,7 @@ export const AdminDashboard: React.FC = () => {
                     </td>
                     <td className="py-4 px-6 text-center">
                       {product.is_active ? (
-                        <span className="inline-flex items-center gap-1 text-emerald-600 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full text-xs font-semibold border border-emerald-100">
+                        <span className="inline-flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full text-xs font-semibold border border-emerald-100">
                           <Check className="h-3 w-3" />
                           <span>Aktif</span>
                         </span>
@@ -168,4 +167,5 @@ export const AdminDashboard: React.FC = () => {
     </div>
   );
 };
+
 export default AdminDashboard;

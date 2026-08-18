@@ -1,18 +1,13 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
-import type { ProdukResponse } from '../../types';
 import { ShoppingBag } from 'lucide-react';
 
-interface ProductCardProps {
-  product: ProdukResponse;
-}
-
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard = ({ product }) => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
 
-  const handleBuyNow = (e: React.MouseEvent) => {
+  const handleBuyNow = (e) => {
     e.preventDefault();
     if (!isSignedIn) {
       navigate('/login');
@@ -25,7 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const formattedPrice = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(product.harga);
 
   return (
@@ -84,4 +79,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     </div>
   );
 };
+
 export default ProductCard;

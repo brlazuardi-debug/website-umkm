@@ -9,11 +9,12 @@ export const apiClient = axios.create({
   },
 });
 
-// Holds the most recent Clerk token getter so the (single, registered-once)
-// request interceptor always reads a fresh function without stacking interceptors.
-let getClerkToken: (() => Promise<string | null>) | null = null;
+// Menyimpan getter token Clerk terbaru agar interceptor (yang hanya
+// didaftarkan SEKALI saat module load) selalu membaca fungsi terbaru
+// tanpa menumpuk interceptor setiap kali login/logout.
+let getClerkToken = null;
 
-// Register the auth interceptor exactly once at module load.
+// Daftarkan auth interceptor tepat satu kali saat module di-load.
 apiClient.interceptors.request.use(
   async (config) => {
     if (getClerkToken) {
@@ -31,9 +32,10 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Point the interceptor at the latest Clerk token getter. Safe to call on every
-// sign-in/out because it only mutates the shared ref — no new interceptor is added.
-export const setAuthTokenInterceptor = (getToken: () => Promise<string | null>): void => {
+// Mengarahkan interceptor ke getter token Clerk terbaru. Aman dipanggil
+// setiap login/logout karena hanya memutasi ref bersama — tidak ada
+// interceptor baru yang ditambahkan.
+export const setAuthTokenInterceptor = (getToken) => {
   getClerkToken = getToken;
 };
 
@@ -43,9 +45,7 @@ apiClient.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     if (status === 401) {
-      // Unauthorized -> arahkan kembali ke login/root jika diperlukan
       console.warn('Unauthorized request - redirecting to login');
-      // Anda bisa memicu redirect ke login di sini jika tidak dalam proses re-autentikasi
     } else if (status === 403) {
       console.error('Akses Ditolak (403): Tidak memiliki izin.');
       alert('Akses Ditolak: Anda tidak memiliki izin untuk mengakses halaman ini.');
@@ -55,4 +55,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 export default apiClient;

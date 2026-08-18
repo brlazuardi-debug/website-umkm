@@ -6,12 +6,13 @@ import { setAuthTokenInterceptor } from './api/client';
 import Layout from './components/Layout';
 
 // Halaman-halaman
-import LandingPage from './pages/LandingPage';
-import ProductDetailPage from './pages/ProductDetailPage';
-import CheckoutPage from './pages/CheckoutPage';
-import OrderStatusPage from './pages/OrderStatusPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import LandingPage from './pages/customers/LandingPage';
+import KatalogProduk from './pages/customers/KatalogProduk';
+import DetailProduk from './pages/customers/DetailProduk';
+import CheckoutPage from './pages/customers/CheckoutPage';
+import OrderStatusPage from './pages/customers/OrderStatusPage';
+import LoginPage from './pages/customers/LoginPage';
+import RegisterPage from './pages/customers/RegisterPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProductFormPage from './pages/admin/ProductFormPage';
 
@@ -30,7 +31,7 @@ if (!CLERK_PUBLISHABLE_KEY) {
 }
 
 // Sub-komponen khusus untuk menginisialisasi interceptor token Clerk dinamis
-const ApiInterceptorInitializer: React.FC = () => {
+const ApiInterceptorInitializer = () => {
   const { getToken, isSignedIn } = useAuth();
 
   useEffect(() => {
@@ -43,14 +44,15 @@ const ApiInterceptorInitializer: React.FC = () => {
 };
 
 // Sub-komponen yang membungkus routing di dalam Clerk Context agar navigate bekerja
-const AppRoutes: React.FC = () => {
+const AppRoutes = () => {
   return (
     <Layout>
       <ApiInterceptorInitializer />
       <Routes>
         {/* Rute Publik */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/products" element={<KatalogProduk />} />
+        <Route path="/products/:id" element={<DetailProduk />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 

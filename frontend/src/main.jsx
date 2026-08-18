@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App.tsx';
+import App from './App.jsx';
 
 // Fungsi untuk mengaktifkan Mock Service Worker di mode development
 async function enableMocking() {
@@ -19,7 +19,7 @@ async function enableMocking() {
 }
 
 enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
+  createRoot(document.getElementById('root')).render(
     <StrictMode>
       <App />
     </StrictMode>

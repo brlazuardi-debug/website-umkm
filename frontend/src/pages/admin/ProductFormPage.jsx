@@ -3,22 +3,22 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getProductById, createProduct, updateProduct } from '../../api/products';
 import { ArrowLeft, Save, Sparkles, Image } from 'lucide-react';
 
-export const ProductFormPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
+export const ProductFormPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!id;
 
   // Form states
-  const [nama, setNama] = useState<string>('');
-  const [deskripsi, setDeskripsi] = useState<string>('');
-  const [harga, setHarga] = useState<number>(0);
-  const [stok, setStok] = useState<number>(0);
-  const [gambarUrl, setGambarUrl] = useState<string>('');
-  const [isActive, setIsActive] = useState<boolean>(true);
+  const [nama, setNama] = useState('');
+  const [deskripsi, setDeskripsi] = useState('');
+  const [harga, setHarga] = useState(0);
+  const [stok, setStok] = useState(0);
+  const [gambarUrl, setGambarUrl] = useState('');
+  const [isActive, setIsActive] = useState(true);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -42,7 +42,7 @@ export const ProductFormPage: React.FC = () => {
     loadProductData();
   }, [id]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!nama.trim()) {
       setError('Nama produk wajib diisi.');
@@ -67,7 +67,7 @@ export const ProductFormPage: React.FC = () => {
         harga,
         stok,
         gambar_url: gambarUrl.trim() || null,
-        is_active: isActive
+        is_active: isActive,
       };
 
       if (isEditMode && id) {
@@ -228,4 +228,5 @@ export const ProductFormPage: React.FC = () => {
     </div>
   );
 };
+
 export default ProductFormPage;

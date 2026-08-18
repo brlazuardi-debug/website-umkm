@@ -1,18 +1,13 @@
 import React from 'react';
 
-interface SpecItemProps {
-  label: string;
-  value: string;
-}
-
-const SpecItem: React.FC<SpecItemProps> = ({ label, value }) => (
+const SpecItem = ({ label, value }) => (
   <div className="flex justify-between py-2 border-b border-stone-200 text-sm">
     <span className="text-stone-500 font-medium">{label}</span>
     <span className="text-stone-900 font-semibold text-right">{value}</span>
   </div>
 );
 
-export const ProductSpec: React.FC = () => {
+export const ProductSpec = () => {
   return (
     <div className="bg-amber-50/50 rounded-xl p-6 border border-amber-100">
       <h3 className="font-serif font-bold text-amber-950 text-lg mb-4">
@@ -31,4 +26,5 @@ export const ProductSpec: React.FC = () => {
     </div>
   );
 };
+
 export default ProductSpec;

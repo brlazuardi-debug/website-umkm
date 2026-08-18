@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { QrCode, CreditCard, AlertCircle, RefreshCw } from 'lucide-react';
 
-interface QRISPaymentProps {
-  qrUrl: string;
-  totalHarga: number;
-  orderId: string;
-  onRefresh: () => void;
-  isLoading: boolean;
-}
-
-export const QRISPayment: React.FC<QRISPaymentProps> = ({
+export const QRISPayment = ({
   qrUrl,
   totalHarga,
   orderId,
   onRefresh,
-  isLoading
+  isLoading,
 }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(300); // 5 menit (300 detik) countdown
+  const [timeLeft, setTimeLeft] = useState(300); // 5 menit (300 detik) countdown
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -26,7 +18,7 @@ export const QRISPayment: React.FC<QRISPaymentProps> = ({
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  const formatTime = (seconds: number): string => {
+  const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
@@ -35,7 +27,7 @@ export const QRISPayment: React.FC<QRISPaymentProps> = ({
   const formattedPrice = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(totalHarga);
 
   return (
@@ -104,4 +96,5 @@ export const QRISPayment: React.FC<QRISPaymentProps> = ({
     </div>
   );
 };
+
 export default QRISPayment;

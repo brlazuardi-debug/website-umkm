@@ -1,0 +1,27 @@
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies / build artifacts (frontend)
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor / OS
+.vscode/*
+.idea
+.DS_Store
+*.suo
+
+# AI agent / tool directories (not part of project)
+.agent/
+.claude/
+.codebuddy/
+.codex/
+.continue/
+.cursor/
+.gemini/
+.kiro/
+.windsurf/
+.augment/

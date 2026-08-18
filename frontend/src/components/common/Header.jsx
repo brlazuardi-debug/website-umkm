@@ -4,7 +4,7 @@ import { useAuth, UserButton } from '@clerk/clerk-react';
 import { useBrand } from '../../context/BrandContext';
 import { ShieldCheck, LogIn } from 'lucide-react';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const { brand, isAdminDemo, setAdminDemo } = useBrand();
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
@@ -80,4 +80,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
 export default Header;

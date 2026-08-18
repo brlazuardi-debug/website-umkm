@@ -1,6 +1,6 @@
 # Website UMKM — Frontend
 
-React 19 + Vite 8 + TypeScript SPA untuk brand product UMKM (et alase + checkout QRIS).
+React 19 + Vite 8 + **JavaScript (JSX) SPA** untuk brand product UMKM (etalase + checkout QRIS).
 Bagian dari polyrepo: frontend ini terpisah dari backend Python (NeonDB / Redis / Clerk / Duitku).
 
 > Status: **MVP frontend selesai (mock-driven).** Integrasi backend belum dikerjakan.
@@ -35,7 +35,7 @@ npm run dev
 | Perintah | Fungsi |
 |----------|--------|
 | `npm run dev` | Dev server (Vite). MSW meng-intercept `/api/v1/*` secara lokal. |
-| `npm run build` | `tsc -b && vite build` → `dist/`. |
+| `npm run build` | `vite build` → `dist/`. |
 | `npm run preview` | Preview build production. |
 | `npm run lint` | Oxlint. |
 
@@ -48,17 +48,20 @@ npm run dev
 ## Architecture
 ```
 src/
-  api/          client.ts (axios + interceptor token Clerk, sekali terdaftar)
-                products.ts | transactions.ts | users.ts
+  api/          client.js (axios + interceptor token Clerk, sekali terdaftar)
+                products.js | transactions.js | users.js
   components/   Layout, common/{Header,Footer,ProtectedRoute}, products/*, transaction/*
-  context/      BrandContext.tsx (info brand + flag demo admin DEV-only)
-  mocks/        browser.ts, handlers.ts (MSW — sumber data mock)
-  pages/        Landing, ProductDetail, Checkout, OrderStatus, Login, Register,
-                admin/{AdminDashboard,ProductFormPage}
-  types/        index.ts (TYPE = single source of truth untuk API contract)
-  App.tsx       ClerkProvider + BrowserRouter + route guards
-  main.tsx      enableMocking() (DEV only) → render App
+  context/      BrandContext.jsx (info brand + flag demo admin DEV-only)
+  mocks/        browser.js, handlers.js (MSW — sumber data mock)
+  pages/        Landing, KatalogProduk, DetailProduk, CheckoutPage, OrderStatus,
+                LoginPage, RegisterPage, admin/{AdminDashboard,ProductFormPage}
+  App.jsx       ClerkProvider + BrowserRouter + route guards
+  main.jsx      enableMocking() (DEV only) → render App
 ```
+
+> Catatan: Proyek ini **murni JavaScript (JSX)** — tidak ada TypeScript (`.ts`/`.tsx`).
+> Build menggunakan `vite build` langsung (tanpa `tsc`). `jsconfig.json` disediakan untuk
+> editor IntelliSense.
 
 ### Auth & Role
 - Customer: login via Clerk (`ProtectedRoute` → redirect `/login` bila belum sign-in).
@@ -67,13 +70,18 @@ src/
   (Clerk JWT metadata, diverifikasi di backend).
 
 ### Data / Mock
-MSW (`src/mocks/handlers.ts`) mengimplementasikan seluruh API contract:
-`/health`, `/products`, `/users/me`, `/transactions`. Transaksi baru otomatis `PAID` setelah 15 dtk
-untuk simulasi polling.
+MSW (`src/mocks/handlers.js`) mengimplementasikan seluruh API contract:
+`/health`, `/products`, `/users/me`, `/transactions`. Transaksi baru otomatis `PAID` setelah
+15 detik untuk simulasi polling.
+
+Endpoint katalog publik mengembalikan produk aktif saja; admin memakai
+`GET /products?include_inactive=true` untuk mengelola produk non-aktif (sesuai kontrak:
+publik aktif-only, admin melihat semua).
 
 ## API Contract
 Base `/api/v1`. Lihat `../API_CONTRACT-2.md` (source of truth: `/docs` OpenAPI di backend nanti).
-Tipe request/response ada di `src/types/index.ts`.
+Skema request/response dijelaskan di kontrak; mock `handlers.js` mengikuti 1:1
+(field `midtrans_order_id`, `qr_url`, status `PENDING|PAID|EXPIRED|FAILED`, dsb).
 
 ## Status vs PRD
 Lihat `../summary.md` untuk mapping fitur MVP, hasil audit, dan known limitations.

@@ -1,18 +1,14 @@
 import React from 'react';
 
-interface TransactionBadgeProps {
-  status: 'PENDING' | 'PAID' | 'EXPIRED' | 'FAILED';
-}
-
-export const TransactionBadge: React.FC<TransactionBadgeProps> = ({ status }) => {
-  const styles: Record<string, string> = {
+export const TransactionBadge = ({ status }) => {
+  const styles = {
     PENDING: 'bg-amber-100 text-amber-800 border-amber-200',
     PAID: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     EXPIRED: 'bg-stone-100 text-stone-600 border-stone-200',
-    FAILED: 'bg-red-100 text-red-800 border-red-250',
+    FAILED: 'bg-red-100 text-red-800 border-red-200', // diperbaiki: border-red-250 tidak ada di Tailwind v4
   };
 
-  const labels: Record<string, string> = {
+  const labels = {
     PENDING: 'Menunggu Pembayaran',
     PAID: 'Pembayaran Berhasil',
     EXPIRED: 'Kedaluwarsa',
@@ -25,4 +21,5 @@ export const TransactionBadge: React.FC<TransactionBadgeProps> = ({ status }) =>
     </span>
   );
 };
+
 export default TransactionBadge;
