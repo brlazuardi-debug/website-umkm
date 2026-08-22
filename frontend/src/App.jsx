@@ -14,14 +14,15 @@ import OrderStatusPage from './pages/customers/OrderStatusPage';
 import LoginPage from './pages/customers/LoginPage';
 import RegisterPage from './pages/customers/RegisterPage';
 import ProfilePage from './pages/customers/ProfilePage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import ProductFormPage from './pages/admin/ProductFormPage';
+
+// Admin Pages (Figma design structure)
+import ProductManagement from './pages/admin/ProductManagement';
+import CartOrders from './pages/admin/CartOrders';
+import EmployeeManagement from './pages/admin/EmployeeManagement';
 
 // Route Guards
 import { ProtectedRoute, AdminRoute } from './components/common/ProtectedRoute';
 
-// Clerk publishable key harus diset via VITE_CLERK_PUBLISHABLE_KEY di .env.
-// Tanpa key, auth tidak akan berfungsi — lebih baik gagal terang daripada pakai key palsu.
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!CLERK_PUBLISHABLE_KEY) {
@@ -31,7 +32,6 @@ if (!CLERK_PUBLISHABLE_KEY) {
   );
 }
 
-// Sub-komponen khusus untuk menginisialisasi interceptor token Clerk dinamis
 const ApiInterceptorInitializer = () => {
   const { getToken, isSignedIn } = useAuth();
 
@@ -44,7 +44,6 @@ const ApiInterceptorInitializer = () => {
   return null;
 };
 
-// Sub-komponen yang membungkus routing di dalam Clerk Context agar navigate bekerja
 const AppRoutes = () => {
   return (
     <Layout>
@@ -88,23 +87,23 @@ const AppRoutes = () => {
           path="/admin"
           element={
             <AdminRoute>
-              <AdminDashboard />
+              <ProductManagement />
             </AdminRoute>
           }
         />
         <Route
-          path="/admin/product/new"
+          path="/admin/cart-orders"
           element={
             <AdminRoute>
-              <ProductFormPage />
+              <CartOrders />
             </AdminRoute>
           }
         />
         <Route
-          path="/admin/product/:id/edit"
+          path="/admin/employee"
           element={
             <AdminRoute>
-              <ProductFormPage />
+              <EmployeeManagement />
             </AdminRoute>
           }
         />

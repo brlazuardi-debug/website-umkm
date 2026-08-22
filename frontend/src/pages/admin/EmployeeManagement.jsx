@@ -1,312 +1,148 @@
-<div data-layer="Admin Panel - Manajemen Karyawan" className="AdminPanelManajemenKaryawan" style={{width: 1280, background: 'linear-gradient(0deg, #F9F9F9 0%, #F9F9F9 100%), white', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-  <div data-layer="Aside - Sidebar Navigation (Desktop)" className="AsideSidebarNavigationDesktop" style={{width: 256, height: 1024, background: 'white', boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.03)', borderRight: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-    <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', padding: 32, justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'inline-flex'}}>
-      <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-        <div data-layer="VARCA BRAND" className="VarcaBrand" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '700', lineHeight: 31.20, wordWrap: 'break-word'}}>VARCA BRAND</div>
-      </div>
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Search, Plus, Mail, Phone, Package, Users, ShoppingBag, LogOut, Settings } from 'lucide-react';
+
+export const EmployeeManagement = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const employees = [
+    { name: 'Renaldi Zaki', initial: 'R', role: 'ADMIN', status: 'ACTIVE', email: 'Renaldi@1.com', phone: '+1 (555) 019-2834', active: true },
+    { name: 'Bagus Lazuardi', initial: 'B', role: 'WAREHOUSE', status: 'ACTIVE', email: 'Bagus@2.com', phone: '+1 (555) 019-2835', active: true },
+    { name: 'Fadli Suta', initial: 'F', role: 'CUSTOMER SERVICE', status: 'ACTIVE', email: 'Fadli@3.com', phone: '+1 (555) 019-2836', active: true },
+    { name: 'Virmanza', initial: 'V', role: 'STORE MANAGER', status: 'ACTIVE', email: 'Virman@4.com', phone: '+1 (555) 019-2837', active: true },
+    { name: 'Dummy 1', initial: 'D', role: 'WAREHOUSE', status: 'INACTIVE', email: 'Dummy@1.com', phone: '+1 (555) 019-2838', active: false },
+  ];
+
+  return (
+    <div data-layer="Admin Panel - Manajemen Karyawan" className="AdminPanelManajemenKaryawan w-full min-h-screen bg-stone-50 text-stone-900 font-semibold flex">
+
+      {/* Sidebar Navigation */}
+      <aside className="w-64 bg-white border-r border-neutral-200 min-h-screen flex flex-col justify-between p-6 shrink-0">
+        <div className="flex flex-col gap-8">
+          <div className="text-black text-2xl font-bold uppercase tracking-tight">
+            VARCA BRAND
+          </div>
+
+          <nav className="flex flex-col gap-2">
+            <span className="text-stone-500 text-xs font-semibold uppercase tracking-wider px-4 py-2">
+              WORKSPACE
+            </span>
+            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 text-zinc-400 font-semibold hover:bg-stone-100 rounded-lg transition">
+              <Package className="w-5 h-5" />
+              <span>Product Management</span>
+            </Link>
+            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 bg-zinc-900 text-white font-semibold rounded-lg transition">
+              <Users className="w-5 h-5 text-white" />
+              <span>Employee Management</span>
+            </Link>
+            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-zinc-400 font-semibold hover:bg-stone-100 rounded-lg transition">
+              <ShoppingBag className="w-5 h-5" />
+              <span>Cart &amp; Orders</span>
+            </Link>
+          </nav>
+        </div>
+
+        <div className="pt-4 border-t border-neutral-200">
+          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-semibold hover:text-black transition">
+            <LogOut className="w-5 h-5" />
+            <span>Sign Out</span>
+          </Link>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col min-h-screen">
+
+        {/* Admin Top Bar */}
+        <header className="h-20 px-8 bg-white border-b border-neutral-200 flex justify-between items-center shadow-xs">
+          <div className="w-96 relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search employees..."
+              className="w-full pl-10 pr-4 py-2.5 bg-zinc-100 rounded-full text-sm text-stone-900 placeholder-gray-500 focus:outline-none"
+            />
+            <Search className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-zinc-100 border border-neutral-200 flex justify-center items-center font-normal text-black">
+              A
+            </div>
+            <span className="text-black text-xs font-semibold tracking-wide">Admin User</span>
+          </div>
+        </header>
+
+        {/* Content Canvas */}
+        <div className="p-8 flex flex-col gap-12 flex-1">
+
+          {/* Page Header & Actions */}
+          <div className="flex justify-between items-end">
+            <div>
+              <h1 className="text-black text-4xl sm:text-5xl font-bold leading-tight">Team Directory</h1>
+              <p className="text-stone-500 text-lg font-normal mt-2">Manage roles, permissions, and personnel across your organization.</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="px-6 py-3.5 border border-black text-black text-xs font-semibold uppercase tracking-wider hover:bg-stone-100 transition">
+                MANAGE PERMISSIONS
+              </button>
+              <button className="px-6 py-3 bg-black text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 hover:bg-neutral-800 transition">
+                <Plus className="w-3.5 h-3.5" />
+                <span>NEW EMPLOYEE</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Employee Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {employees.map((emp, index) => (
+              <div
+                key={index}
+                className={`p-6 bg-white border border-neutral-200 rounded-lg relative flex flex-col justify-between gap-6 ${!emp.active ? 'opacity-75' : ''}`}
+              >
+                <div className="w-full h-1 bg-neutral-200 absolute top-0 left-0"></div>
+
+                <div className="flex justify-between items-start pt-2">
+                  <div className="w-16 h-16 rounded-full bg-neutral-200 flex justify-center items-center text-black text-4xl font-normal">
+                    {emp.initial}
+                  </div>
+                  <div className="px-2 py-1 border border-neutral-200 rounded-sm flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${emp.active ? 'bg-orange-400' : 'bg-stone-500'}`}></span>
+                    <span className={`text-xs font-semibold uppercase ${emp.active ? 'text-black' : 'text-stone-500'}`}>
+                      {emp.status}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <h3 className={`text-2xl font-medium ${emp.active ? 'text-black' : 'text-stone-500'}`}>
+                    {emp.name}
+                  </h3>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${emp.role === 'ADMIN' ? 'text-orange-400' : 'text-stone-500'}`}>
+                    {emp.role}
+                  </span>
+                </div>
+
+                <div className="pt-4 border-t border-neutral-200 flex flex-col gap-3 text-stone-500 text-sm">
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-4 h-4 text-stone-500" />
+                    <span>{emp.email}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-4 h-4 text-stone-500" />
+                    <span>{emp.phone}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </main>
+
     </div>
-    <div data-layer="Nav" className="Nav" style={{alignSelf: 'stretch', flex: '1 1 0', position: 'relative', overflow: 'hidden'}}>
-      <div data-layer="Container" className="Container" style={{width: 223, paddingLeft: 16, paddingRight: 16, paddingTop: 8, paddingBottom: 8, left: 16, top: 16, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-        <div data-layer="WORKSPACE" className="Workspace" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>WORKSPACE</div>
-      </div>
-      <div data-layer="Link" className="Link" style={{width: 223, height: 72, left: 16, top: 52, position: 'absolute', borderRadius: 8}}>
-        <div data-layer="Margin" className="Margin" style={{paddingRight: 12, left: 16, top: 26, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Icon" className="Icon" style={{width: 20, height: 20, background: '#BABABA'}} />
-        </div>
-        <div data-layer="Container" className="Container" style={{paddingRight: 55.94, left: 53, top: 12, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Product Management" className="ProductManagement" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#BABABA', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', lineHeight: 24, wordWrap: 'break-word'}}>Product<br/>Management</div>
-        </div>
-      </div>
-      <div data-layer="Link" className="Link" style={{width: 223, height: 75.19, left: 16, top: 132, position: 'absolute', borderRadius: 4}}>
-        <div data-layer="Rectangle 4" className="Rectangle4" style={{width: 223, height: 60, left: 0, top: 8, position: 'absolute', background: '#1B1B1B', borderRadius: 10}} />
-        <div data-layer="Container" className="Container" style={{left: 16, top: 29.59, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Icon" className="Icon" style={{width: 22, height: 16, background: '#ADADAD'}} />
-        </div>
-        <div data-layer="Container" className="Container" style={{width: 150.98, height: 51.19, left: 54, top: 12, position: 'absolute'}}>
-          <div data-layer="Employee Management" className="EmployeeManagement" style={{width: 103, left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#ADADAD', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', lineHeight: 25.60, wordWrap: 'break-word'}}>Employee<br/>Management</div>
-        </div>
-      </div>
-      <div data-layer="Link" className="Link" style={{width: 223, height: 48, paddingLeft: 16, paddingRight: 16, paddingTop: 12, paddingBottom: 12, left: 16, top: 215.19, position: 'absolute', borderRadius: 8, justifyContent: 'flex-start', alignItems: 'center', gap: 7, display: 'inline-flex'}}>
-        <div data-layer="Margin" className="Margin" style={{paddingRight: 12, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Icon" className="Icon" style={{width: 19.98, height: 20, background: '#BABABA'}} />
-        </div>
-        <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Cart & Orders" className="CartOrders" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#BABABA', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', lineHeight: 24, wordWrap: 'break-word'}}>Cart &amp; Orders</div>
-        </div>
-      </div>
-    </div>
-    <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', padding: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-      <div data-layer="Link" className="Link" style={{alignSelf: 'stretch', paddingLeft: 16, paddingRight: 16, paddingTop: 12, paddingBottom: 12, borderRadius: 4, justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'inline-flex'}}>
-        <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Icon" className="Icon" style={{width: 18, height: 18, background: '#666666'}} />
-        </div>
-        <div data-layer="Container" className="Container" style={{width: 65.52, height: 25.59, position: 'relative'}}>
-          <div data-layer="Sign Out" className="SignOut" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', lineHeight: 25.60, wordWrap: 'break-word'}}>Sign Out</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div data-layer="Main Content Area" className="MainContentArea" style={{flex: '1 1 0', alignSelf: 'stretch', minHeight: 1034, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-    <div data-layer="Admin Top Bar (Desktop)" className="AdminTopBarDesktop" style={{alignSelf: 'stretch', height: 80, paddingLeft: 32, paddingRight: 32, background: 'white', borderBottom: '1px #E5E5E5 solid', justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex'}}>
-      <div data-layer="Container" className="Container" style={{width: 448, maxWidth: 448, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-        <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', position: 'relative', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-          <div data-layer="Input" className="Input" style={{alignSelf: 'stretch', paddingTop: 10, paddingBottom: 11.59, paddingLeft: 40, paddingRight: 16, background: '#F3F3F4', overflow: 'hidden', borderRadius: 9999, justifyContent: 'center', alignItems: 'flex-start', display: 'inline-flex'}}>
-            <div data-layer="Container" className="Container" style={{flex: '1 1 0', overflow: 'hidden', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Search employees..." className="SearchEmployees" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#6B7280', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Search employees...</div>
-            </div>
-          </div>
-          <div data-layer="Container" className="Container" style={{height: 23.42, left: 12, top: 8.59, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Icon" className="Icon" style={{width: 18, height: 18, background: '#666666'}} />
-          </div>
-        </div>
-      </div>
-      <div data-layer="Container" className="Container" style={{justifyContent: 'flex-start', alignItems: 'center', gap: 24, display: 'flex'}}>
-        <div data-layer="Container" className="Container" style={{justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'flex'}}>
-          <div data-layer="Background+Border" className="BackgroundBorder" style={{width: 40, height: 40, position: 'relative', background: '#EEEEEE', overflow: 'hidden', borderRadius: 9999, outline: '1px #E5E5E5 solid', outlineOffset: '-1px'}}>
-            <div data-layer="A" className="A" style={{width: 16, height: 15, left: 11.78, top: 12, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>A</div>
-          </div>
-          <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', height: 12, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>Admin User</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div data-layer="Content Canvas" className="ContentCanvas" style={{alignSelf: 'stretch', flex: '1 1 0', padding: 32, overflow: 'hidden', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 48, display: 'flex'}}>
-      <div data-layer="Page Header & Actions" className="PageHeaderActions" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-end', display: 'inline-flex'}}>
-        <div data-layer="Container" className="Container" style={{width: 525.25, height: 147.19, position: 'relative'}}>
-          <div data-layer="Heading 1" className="Heading1" style={{width: 525.25, paddingBottom: 0.80, left: 0, top: -1, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-            <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 48, fontFamily: 'Inter', fontWeight: '700', lineHeight: 52.80, wordWrap: 'break-word'}}>Team Directory</div>
-          </div>
-          <div data-layer="Container" className="Container" style={{width: 525.25, maxWidth: 672, paddingBottom: 0.60, left: 0, top: 59.60, position: 'absolute', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-            <div data-layer="Manage roles, permissions, and personnel across your organization." className="ManageRolesPermissionsAndPersonnelAcrossYourOrganization" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 18, fontFamily: 'Inter', fontWeight: '400', lineHeight: 28.80, wordWrap: 'break-word'}}>Manage roles, permissions, and personnel across your<br/>organization.</div>
-          </div>
-        </div>
-        <div data-layer="Container" className="Container" style={{justifyContent: 'flex-start', alignItems: 'flex-start', gap: 16, display: 'flex'}}>
-          <div data-layer="Button" className="Button" style={{paddingTop: 13.50, paddingBottom: 14.50, paddingLeft: 24, paddingRight: 24, outline: '1px black solid', outlineOffset: '-1px', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
-            <div data-layer="Text" className="Text" style={{textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>MANAGE PERMISSIONS</div>
-          </div>
-          <div data-layer="Button" className="Button" style={{height: 42, paddingLeft: 24, paddingRight: 24, paddingTop: 12, paddingBottom: 12, background: 'black', justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', display: 'inline-flex'}}>
-              <div data-layer="Icon" className="Icon" style={{width: 10.50, height: 10.50, background: 'white'}} />
-            </div>
-            <div data-layer="Text" className="Text" style={{textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>NEW EMPLOYEE</div>
-          </div>
-        </div>
-      </div>
-      <div data-layer="Employee Grid" className="EmployeeGrid" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-        <div data-layer="Employee Card 1" className="EmployeeCard1" style={{alignSelf: 'stretch', padding: 24, position: 'relative', background: 'white', overflow: 'hidden', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Background" className="Background" style={{width: 64, height: 64, position: 'relative', background: '#E2E2E2', overflow: 'hidden', borderRadius: 9999}}>
-                <div data-layer="R" className="R" style={{left: 19, top: 18.81, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 40, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>R</div>
-              </div>
-              <div data-layer="Border" className="Border" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: 4, outline: '1px #E5E5E5 solid', outlineOffset: '-1px', justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'flex'}}>
-                <div data-layer="Background" className="Background" style={{width: 6, height: 6, background: '#C5A059', borderRadius: 9999}} />
-                <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>ACTIVE</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Heading 3:margin" className="Heading3Margin" style={{alignSelf: 'stretch', paddingBottom: 4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Heading 3" className="Heading3" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Renaldi Zaki" className="RenaldiZaki" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '500', lineHeight: 31.20, wordWrap: 'break-word'}}>Renaldi Zaki</div>
-            </div>
-          </div>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="ADMIN" className="Admin" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#C5A059', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>ADMIN</div>
-            </div>
-          </div>
-          <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', paddingTop: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 15, height: 12, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 144, height: 25.59, position: 'relative', overflow: 'hidden'}}>
-                <div data-layer="Renaldi@1.com" className="Renaldi1Com" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>Renaldi@1.com</div>
-              </div>
-            </div>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 13.50, height: 13.50, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 139.47, height: 25.59, position: 'relative'}}>
-                <div data-layer="Text" className="Text" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>+1 (555) 019-2834</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Background" className="Background" style={{width: 222, height: 4, left: 0, top: 0, position: 'absolute', background: '#E2E2E2'}} />
-        </div>
-        <div data-layer="Employee Card 2" className="EmployeeCard2" style={{alignSelf: 'stretch', padding: 24, position: 'relative', background: 'white', overflow: 'hidden', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Background" className="Background" style={{width: 64, height: 64, position: 'relative', background: '#E2E2E2', overflow: 'hidden', borderRadius: 9999}}>
-                <div data-layer="B" className="B" style={{left: 18, top: 18.81, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 40, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>B</div>
-              </div>
-              <div data-layer="Border" className="Border" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: 4, outline: '1px #E5E5E5 solid', outlineOffset: '-1px', justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'flex'}}>
-                <div data-layer="Background" className="Background" style={{width: 6, height: 6, background: '#C5A059', borderRadius: 9999}} />
-                <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>ACTIVE</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Heading 3:margin" className="Heading3Margin" style={{alignSelf: 'stretch', paddingBottom: 4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Heading 3" className="Heading3" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Bagus Lazuardi" className="BagusLazuardi" style={{width: 180, justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '500', lineHeight: 31.20, wordWrap: 'break-word'}}>Bagus Lazuardi</div>
-            </div>
-          </div>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="WAREHOUSE" className="Warehouse" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>WAREHOUSE</div>
-            </div>
-          </div>
-          <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', paddingTop: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 15, height: 12, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 144, height: 25.59, position: 'relative', overflow: 'hidden'}}>
-                <div data-layer="Bagus@2.com" className="Bagus2Com" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>Bagus@2.com</div>
-              </div>
-            </div>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 13.50, height: 13.50, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 138.63, height: 25.59, position: 'relative'}}>
-                <div data-layer="Text" className="Text" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>+1 (555) 019-2835</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Background" className="Background" style={{width: 222, height: 4, left: 0, top: 0, position: 'absolute', background: '#E2E2E2'}} />
-        </div>
-        <div data-layer="Employee Card 3" className="EmployeeCard3" style={{alignSelf: 'stretch', padding: 24, position: 'relative', background: 'white', overflow: 'hidden', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Background" className="Background" style={{width: 64, height: 64, position: 'relative', background: '#E2E2E2', overflow: 'hidden', borderRadius: 9999}}>
-                <div data-layer="F" className="F" style={{left: 20, top: 18.81, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 40, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>F</div>
-              </div>
-              <div data-layer="Border" className="Border" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: 4, outline: '1px #E5E5E5 solid', outlineOffset: '-1px', justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'flex'}}>
-                <div data-layer="Background" className="Background" style={{width: 6, height: 6, background: '#C5A059', borderRadius: 9999}} />
-                <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>ACTIVE</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Heading 3:margin" className="Heading3Margin" style={{alignSelf: 'stretch', paddingBottom: 4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Heading 3" className="Heading3" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Fadli Suta" className="FadliSuta" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '500', lineHeight: 31.20, wordWrap: 'break-word'}}>Fadli Suta</div>
-            </div>
-          </div>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="CUSTOMER SERVICE" className="CustomerService" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>CUSTOMER SERVICE</div>
-            </div>
-          </div>
-          <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', paddingTop: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 15, height: 12, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 144, height: 25.59, position: 'relative', overflow: 'hidden'}}>
-                <div data-layer="Fadli@3.com" className="Fadli3Com" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>Fadli@3.com</div>
-              </div>
-            </div>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 13.50, height: 13.50, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 139.05, height: 25.59, position: 'relative'}}>
-                <div data-layer="Text" className="Text" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>+1 (555) 019-2836</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Background" className="Background" style={{width: 222, height: 4, left: 0, top: 0, position: 'absolute', background: '#E2E2E2'}} />
-        </div>
-        <div data-layer="Employee Card 4" className="EmployeeCard4" style={{alignSelf: 'stretch', padding: 24, position: 'relative', background: 'white', overflow: 'hidden', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Background" className="Background" style={{width: 64, height: 64, position: 'relative', background: '#E2E2E2', overflow: 'hidden', borderRadius: 9999}}>
-                <div data-layer="V" className="V" style={{left: 18, top: 18.81, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 40, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>V</div>
-              </div>
-              <div data-layer="Border" className="Border" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: 4, outline: '1px #E5E5E5 solid', outlineOffset: '-1px', justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'flex'}}>
-                <div data-layer="Background" className="Background" style={{width: 6, height: 6, background: '#C5A059', borderRadius: 9999}} />
-                <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>ACTIVE</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Heading 3:margin" className="Heading3Margin" style={{alignSelf: 'stretch', paddingBottom: 4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Heading 3" className="Heading3" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Virmanza" className="Virmanza" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 24, fontFamily: 'Inter', fontWeight: '500', lineHeight: 31.20, wordWrap: 'break-word'}}>Virmanza</div>
-            </div>
-          </div>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="STORE MANAGER" className="StoreManager" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>STORE MANAGER</div>
-            </div>
-          </div>
-          <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', paddingTop: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 15, height: 12, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 144, height: 25.59, position: 'relative', overflow: 'hidden'}}>
-                <div data-layer="Virman@4.com" className="Virman4Com" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>Virman@4.com</div>
-              </div>
-            </div>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 13.50, height: 13.50, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 138.19, height: 25.59, position: 'relative'}}>
-                <div data-layer="Text" className="Text" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>+1 (555) 019-2837</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Background" className="Background" style={{width: 222, height: 4, left: 0, top: 0, position: 'absolute', background: '#E2E2E2'}} />
-        </div>
-        <div data-layer="Employee Card 5" className="EmployeeCard5" style={{alignSelf: 'stretch', padding: 24, position: 'relative', opacity: 0.75, background: 'white', overflow: 'hidden', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', display: 'inline-flex'}}>
-              <div data-layer="Background" className="Background" style={{width: 64, height: 64, position: 'relative', background: 'linear-gradient(0deg, white 0%, white 100%), #E2E2E2', backgroundBlendMode: 'saturation, normal', overflow: 'hidden', borderRadius: 9999}}>
-                <div data-layer="D" className="D" style={{left: 18, top: 19.43, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 40, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>D</div>
-              </div>
-              <div data-layer="Border" className="Border" style={{paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: 4, outline: '1px #E5E5E5 solid', outlineOffset: '-1px', justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'flex'}}>
-                <div data-layer="Background" className="Background" style={{width: 6, height: 6, background: '#666666', borderRadius: 9999}} />
-                <div data-layer="Text" className="Text" style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 0.60, wordWrap: 'break-word'}}>INACTIVE</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Heading 3:margin" className="Heading3Margin" style={{alignSelf: 'stretch', paddingBottom: 4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Heading 3" className="Heading3" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="Dummy 1" className="Dummy1" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 24, fontFamily: 'Inter', fontWeight: '500', lineHeight: 31.20, wordWrap: 'break-word'}}>Dummy 1</div>
-            </div>
-          </div>
-          <div data-layer="Margin" className="Margin" style={{alignSelf: 'stretch', paddingBottom: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex'}}>
-              <div data-layer="WAREHOUSE" className="Warehouse" style={{alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: 12, letterSpacing: 1.20, wordWrap: 'break-word'}}>WAREHOUSE</div>
-            </div>
-          </div>
-          <div data-layer="HorizontalBorder" className="Horizontalborder" style={{alignSelf: 'stretch', paddingTop: 16, borderTop: '1px #E5E5E5 solid', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 12, display: 'flex'}}>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 15, height: 12, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 144, height: 25.59, position: 'relative', overflow: 'hidden'}}>
-                <div data-layer="Dummy@1.com" className="Dummy1Com" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>Dummy@1.com</div>
-              </div>
-            </div>
-            <div data-layer="Container" className="Container" style={{alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 12, display: 'inline-flex'}}>
-              <div data-layer="Container" className="Container" style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex'}}>
-                <div data-layer="Icon" className="Icon" style={{width: 13.50, height: 13.50, background: '#666666'}} />
-              </div>
-              <div data-layer="Container" className="Container" style={{width: 139.03, height: 25.59, position: 'relative'}}>
-                <div data-layer="Text" className="Text" style={{left: 0, top: -1, position: 'absolute', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#666666', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: 25.60, wordWrap: 'break-word'}}>+1 (555) 019-2838</div>
-              </div>
-            </div>
-          </div>
-          <div data-layer="Background" className="Background" style={{width: 222, height: 4, left: 0, top: 0, position: 'absolute', background: '#E2E2E2'}} />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  );
+};
+
+export default EmployeeManagement;
