@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createTransaction, getTransactionById } from '../../api/transactions';
 import { QRISPayment } from '../../components/transaction/QRISPayment';
@@ -14,12 +14,18 @@ export const CheckoutPage = () => {
   const [error, setError] = useState(null);
   const [polling, setPolling] = useState(false);
 
+  // Guard: StrictMode (dev) menjalankan effect dua kali — jangan buat
+  // transaksi duplikat untuk produk yang sama.
+  const txCreatedRef = useRef(false);
+
   // Buat transaksi sekali saat masuk ke halaman checkout (single-item flow MVP).
   useEffect(() => {
     if (!product) {
       navigate('/products', { replace: true });
       return;
     }
+    if (txCreatedRef.current) return;
+    txCreatedRef.current = true;
     const createTx = async () => {
       try {
         setSubmitting(true);

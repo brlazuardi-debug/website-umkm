@@ -34,11 +34,15 @@
 
 | Method | Path | Auth | Request | Response | Deskripsi |
 |--------|------|------|---------|----------|-----------|
-| GET | `/api/v1/products` | Public | `?limit=20&offset=0` | `ProdukResponse[]` | List produk (cached 60s) |
+| GET | `/api/v1/products` | Public | `?limit=20&offset=0` | `ProdukResponse[]` | List produk (cached 60s). Default hanya `is_active=true`. |
+| GET | `/api/v1/products?include_inactive=true` | Admin JWT | - | `ProdukResponse[]` | Termasuk produk non-aktif (dipakai panel admin, PROD-4). |
 | GET | `/api/v1/products/{id}` | Public | - | `ProdukResponse` | Detail produk |
 | POST | `/api/v1/products` | Admin JWT | `ProdukCreate` | `ProdukResponse` (201) | Buat produk |
 | PUT | `/api/v1/products/{id}` | Admin JWT | `ProdukUpdate` | `ProdukResponse` | Update produk |
 | DELETE | `/api/v1/products/{id}` | Admin JWT | - | 204 No Content | Hapus produk |
+
+> **Catatan kebutuhan frontend (belum ada di backend):**
+> - `GET /api/v1/transactions` (Admin) — list transaksi untuk halaman admin "Cart & Orders" yang akan datang.
 
 ---
 

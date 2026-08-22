@@ -13,6 +13,7 @@ import CheckoutPage from './pages/customers/CheckoutPage';
 import OrderStatusPage from './pages/customers/OrderStatusPage';
 import LoginPage from './pages/customers/LoginPage';
 import RegisterPage from './pages/customers/RegisterPage';
+import ProfilePage from './pages/customers/ProfilePage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProductFormPage from './pages/admin/ProductFormPage';
 
@@ -70,6 +71,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <OrderStatusPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

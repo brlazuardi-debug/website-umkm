@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, UserButton } from '@clerk/clerk-react';
 import { useBrand } from '../../context/BrandContext';
-import { ShieldCheck, LogIn } from 'lucide-react';
+import { ShieldCheck, LogIn, UserRound } from 'lucide-react';
 
 export const Header = () => {
   const { brand, isAdminDemo, setAdminDemo } = useBrand();
@@ -23,8 +23,8 @@ export const Header = () => {
           {/* Navigasi Utama */}
           <nav className="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
             <Link to="/" className="hover:text-amber-700 transition">Beranda</Link>
-            <a href="#katalog" className="hover:text-amber-700 transition">Katalog Produk</a>
-            <a href="#tentang-kami" className="hover:text-amber-700 transition">Tentang Kami</a>
+            <Link to="/products" className="hover:text-amber-700 transition">Katalog Produk</Link>
+            <Link to="/#tentang-kami" className="hover:text-amber-700 transition">Tentang Kami</Link>
           </nav>
 
           {/* User & Auth Buttons */}
@@ -55,6 +55,13 @@ export const Header = () => {
 
             {isSignedIn ? (
               <div className="flex items-center space-x-3">
+                <Link
+                  to="/profile"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-amber-900 hover:text-amber-700 transition"
+                >
+                  <UserRound className="h-4 w-4" />
+                  <span>Profil</span>
+                </Link>
                 {isAdminDemo && (
                   <Link
                     to="/admin"
