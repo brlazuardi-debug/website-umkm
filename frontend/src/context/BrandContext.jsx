@@ -1,19 +1,20 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const defaultBrand = {
-  name: 'Sanggar Nusantara',
-  slogan: 'Melestarikan Warisan Budaya Lewat Karya Tangan Terbaik',
-  story: 'Didirikan pada tahun 2018 di Cirebon, Sanggar Nusantara berawal dari komunitas kecil pengrajin lokal yang berkomitmen mempertahankan metode tradisional pembuatan batik tulis dan anyaman rotan. Setiap produk kami mengandung sejarah panjang, ketekunan, dan cinta terhadap tanah air. Dengan mendukung kami, Anda ikut melestarikan mata pencaharian puluhan pengrajin lokal dan menjaga tradisi nusantara tetap hidup.',
+  name: 'VARCA BRAND',
+  slogan: 'Elevate your everyday with premium minimalist essentials.',
+  story: 'VARCA BRAND is a luxury minimalist fashion label dedicated to elevated everyday essentials. Founded on the principles of architectural silhouette, uncompromising fabric quality, and mindful craftsmanship, every piece is designed to transcend seasons and form the foundation of a modern, intentional wardrobe.',
   philosophies: [
-    { title: '100% Karya Lokal', description: 'Semua bahan baku bersumber dari alam Indonesia dan dikerjakan langsung oleh pengrajin daerah.' },
-    { title: 'Kualitas Premium', description: 'Setiap goresan canting dan anyaman rotan melewati proses kontrol kualitas yang ketat.' },
-    { title: 'Dampak Sosial', description: 'Setiap hasil penjualan didedikasikan untuk peningkatan kesejahteraan komunitas pengrajin kami.' },
+    { title: 'Elevated Minimalism', description: 'Architectural cuts, refined monochromatic palettes, and meticulous attention to detail.' },
+    { title: 'Uncompromising Quality', description: 'Heavyweight organic cottons, Italian wool blends, and durable luxury hardware.' },
+    { title: 'Mindful Craftsmanship', description: 'Ethically crafted in limited runs to ensure exclusivity and reduce fashion waste.' },
   ],
-  address: 'Jl. Melati No. 45, Kesambi, Kota Cirebon, Jawa Barat 45134',
-  phone: '+62 812-3456-7890',
-  email: 'kontak@sanggarnantara.id',
-  instagram: '@sanggar.nusantara',
-  website: 'sanggarnusantara.id',
+  address: 'SCBD District 8, Senopati, South Jakarta 12190',
+  phone: '+62 21-5098-7654',
+  email: 'concierge@varca.id',
+  instagram: '@varca.official',
+  website: 'varca.id',
+  hero_image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600',
   logoUrl: null,
 };
 

@@ -1,44 +1,104 @@
 # Website UMKM (VARCA BRAND)
 
-Frontend SPA (React 19 + Vite 8 + **JavaScript JSX**) untuk brand luxury & minimalist product UMKM — 100% persis desain Figma (`VuOuH1OTenDwxVZxTKMw9D/Brand-UMKM`) dengan Inter semi-bold typography & visual monokrom modern.
+Platform E-Commerce & Admin Management System untuk brand luxury & minimalist apparel UMKM — 100% presisi mengikuti spesifikasi desain Figma (`VuOuH1OTenDwxVZxTKMw9D/Brand-UMKM`) dengan Inter typography, visual monokrom modern, dan arsitektur RESTful API modular berstandar OpenAPI v3.1.
 
-Ini adalah **polyrepo**: frontend dipisah dari backend Python (NeonDB / Redis / Clerk / Duitku QRIS).
+---
 
-> Status: **Frontend MVP 100% matched Figma designs (Landing, Katalog, Detail, Checkout, Cart & Orders, Product Management, Employee Management).** Integrasi backend terhubung ke REST API (`/api/v1`) & Clerk Auth.
+## 🏗️ Struktur Repositori
 
-## Struktur Repo
-- `frontend/` — kode SPA React (JavaScript/JSX).
-- `*.md` (root) — dokumen sumber: `PRD-UMKM-Website.md`, `API_CONTRACT-2.md`,
-  `ERD.md`, `summary.md`, `agents.md`.
+```
+website-umkm/
+├── backend/                  # FastAPI Modular Domain-Driven Architecture (Python 3.12+)
+│   ├── app/
+│   │   ├── core/             # Security, Database, 7-Role RBAC, Custom Exceptions
+│   │   ├── db/               # Model registration & Seeder
+│   │   ├── modules/          # Domain Modules (users, products, carts, transactions, orders, employees, auth)
+│   │   ├── config.py         # App Settings & Env parser
+│   │   └── main.py           # FastAPI entry point, CORS, static uploads & router mounting
+│   ├── tests/                # Async Pytest suite (13 passing test suites)
+│   ├── pytest.ini
+│   └── requirements.txt
+│
+├── frontend/                 # React 19 SPA (Vite 8 + Tailwind CSS v4)
+│   ├── src/
+│   │   ├── api/              # Axios API clients (products, orders, carts, employees, transactions, users)
+│   │   ├── components/       # UI Components, Layout, ProtectedRoute, Modals
+│   │   ├── context/          # BrandContext (VARCA Brand profile & Admin Demo Toggle)
+│   │   ├── mocks/            # MSW (Mock Service Worker) browser handlers
+│   │   ├── pages/
+│   │   │   ├── admin/        # ProductManagement, ProductFormPage, CartOrders, EmployeeManagement
+│   │   │   └── customers/    # LandingPage, KatalogProduk, DetailProduk, CheckoutPage, OrderStatusPage, ProfilePage, Login, Register
+│   │   ├── App.jsx           # App Routing & Clerk Auth Provider
+│   │   └── main.jsx
+│   └── package.json
+│
+├── API_CONTRACT-3.md         # Source of Truth kontrak API v3 (30 Endpoints)
+├── PRD-UMKM-Website.md       # Product Requirements Document
+├── ERD.md                    # Entity Relationship Diagram & Database Schema
+├── summary.md                # Laporan perkembangan & status integrasi
+└── agents.md                 # Panduan teknis arsitektur untuk AI Agent & Developers
+```
 
-## Tech Stack & Design System
-- React 19, React Router 7
-- Vite 8 + `@vitejs/plugin-react` + `@tailwindcss/vite` (Tailwind v4)
-- Inter Font Family (`font-['Inter']`, semi-bold weight focus)
-- Monochromatic Modern Visual Aesthetics
-- Clerk (`@clerk/clerk-react`) — auth
-- Axios — API client
-- Lucide React — Icons set
+---
 
-## Quick Start
+## ⚡ Tech Stack
+
+### Frontend:
+- **Framework:** React 19, React Router 7
+- **Build Tool & Styling:** Vite 8, Tailwind CSS v4 (`@tailwindcss/vite`)
+- **Typography:** Inter Font Family (`font-['Inter']`, Semi-Bold / Medium focus)
+- **Icons:** Lucide React (100% SVG, Zero Emojis)
+- **Auth:** Clerk Authentication (`@clerk/clerk-react`)
+- **HTTP Client:** Axios (Global Interceptors & Auth Token Binding)
+
+### Backend:
+- **Framework:** Python 3.12+, FastAPI, Pydantic v2
+- **ORM & Database:** SQLAlchemy 2.0 (Async), aiosqlite / PostgreSQL (NeonDB ready)
+- **Auth & RBAC:** Clerk JWT verification (RS256 & Mock Token format), 7-level Role Matrix (`OWNER`, `ADMIN`, `STORE MANAGER`, `WAREHOUSE`, `CUSTOMER SERVICE`, `CASHIER`, `STAFF`)
+- **Testing:** Pytest, pytest-asyncio, HTTPX AsyncClient
+- **Documentation:** Auto-generated Swagger UI (`/docs`) & OpenAPI 3.1 (`/openapi.json`)
+
+---
+
+## 🚀 Quick Start
+
+### 1. Menjalankan Backend (FastAPI)
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Jalankan server development (Port 8000)
+uvicorn app.main:app --reload --port 8000
+
+# Menjalankan test suite
+pytest -v
+```
+
+### 2. Menjalankan Frontend (React SPA)
 ```bash
 cd frontend
 npm install
-cp .env.example .env        # isi VITE_CLERK_PUBLISHABLE_KEY
-npm run dev                 # dev server di localhost:5173
+cp .env.example .env        # Isi VITE_CLERK_PUBLISHABLE_KEY & VITE_API_BASE_URL
+npm run dev                 # Dev server di http://localhost:5173
+npm run build               # Production build
 ```
 
-## Halaman Utama (Customer & Admin)
-1. **Landing Page (`/`)** — Hero section, bento asymmetrical grid, new arrivals, category sections, brand philosophy.
-2. **Katalog Produk (`/products`)** — Dynamic category tabs (Tops, Bottoms, Outerwear), size filters (S, M, L, XL), price sorting.
-3. **Detail Produk (`/products/:id`)** — Image gallery grid, color/size selector, accordions (shipping/care), recommended looks.
-4. **Checkout (`/checkout`)** — Transactional form with Clerk auto-fill, address entry, QRIS & Bank selector, order summary.
-5. **Admin - Product Management (`/admin`)** — Inventory Bento grid, dynamic CRUD table (getProducts, deleteProduct).
-6. **Admin - Cart & Orders (`/admin/cart-orders`)** — Active carts, pending orders, abandoned metrics, order status tracking.
-7. **Admin - Employee Management (`/admin/employee`)** — Team directory grid, roles (Admin, Warehouse, Manager), status badges.
+---
 
-## Dokumentasi
-- `frontend/README.md` — detail setup & arsitektur frontend.
-- `summary.md` — ringkasan perkembangan, audit, status konversi Figma 1:1.
-- `API_CONTRACT-2.md` — kontrak API (source of truth).
-- `agents.md` — panduan untuk AI agent/developer.
+## 📱 Halaman & Fitur Utama
+
+### Customer Experience (E-Commerce):
+1. **Landing Page (`/`)** — Hero Section dengan luxury background photography, Bento Grid New Arrivals, kategori Tops & Bottoms, serta Brand Manifesto.
+2. **Katalog Produk (`/products`)** — Tab kategori dinamis (*ALL, TOPS, BOTTOMS, OUTERWEAR, ACCESSORIES*), filter ukuran (*S, M, L, XL*), pengurutan harga, serta badge *LOW STOCK*.
+3. **Detail Produk (`/products/:id`)** — Multi-image gallery grid, color & size selector, expandable accordions (Shipping & Care), rekomendasi *Complete The Look*, dan Instant Checkout.
+4. **Checkout & Pembayaran (`/checkout`)** — Form info pembeli, alamat pengiriman, selector pembayaran QRIS / Transfer Bank, dan ringkasan pesanan.
+5. **Status Pesanan (`/order-status/:id`)** — Indikator status pesanan real-time dengan polling otomatis (PENDING $\rightarrow$ PAID / SHIPPED).
+6. **Profil Akun (`/profile`)** — Manajemen nama dan data profil terautentikasi.
+
+### Admin & Operations Panel:
+1. **Product Management (`/admin`)** — Bento Metrics inventaris (*Total Products, Low Stock, Pending POS, Returns*), tabel inventaris produk, edit, dan hapus.
+2. **Product Form (`/admin/product/new` & `/admin/product/:id/edit`)** — Form penambahan dan pengeditan informasi produk serta upload gambar.
+3. **Cart & Orders Management (`/admin/cart-orders`)** — Metrik keranjang aktif & pesanan pending, tabel pesanan terbaru, serta **Modal Order Details** untuk pembaruan status pesanan (*PENDING $\rightarrow$ PAID $\rightarrow$ SHIPPED*).
+4. **Employee Management (`/admin/employee`)** — Direktori tim organisasi, inisial avatar, tag role, nomor kontak, serta **Modal New Employee** untuk pendaftaran staf baru.

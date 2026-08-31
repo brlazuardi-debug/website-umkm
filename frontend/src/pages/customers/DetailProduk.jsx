@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { getProductById, getProducts } from '../../api/products';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 
 export const DetailProduk = () => {
   const { id } = useParams();
@@ -23,8 +23,8 @@ export const DetailProduk = () => {
         setLoading(true);
         const data = await getProductById(id);
         setProduct(data);
-        const allProducts = await getProducts(3, 0);
-        setRecommendations(allProducts.filter((p) => p.id !== Number(id)).slice(0, 3));
+        const allProducts = await getProducts(4, 0);
+        setRecommendations(allProducts.filter((p) => p.id !== id).slice(0, 3));
       } catch (err) {
         console.error('Gagal memuat detail produk:', err);
       } finally {
@@ -47,138 +47,149 @@ export const DetailProduk = () => {
       style: 'currency',
       currency: 'IDR',
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(price || 0);
   };
+
+  const defaultDetailImg1 = 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600';
+  const defaultDetailImg2 = 'https://images.unsplash.com/photo-1542272604-780c96856553?q=80&w=600';
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20 bg-stone-50 min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-900"></div>
+      <div className="flex justify-center items-center py-32 bg-stone-50 min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="text-center py-20 bg-stone-50 min-h-screen">
-        <h2 className="text-2xl font-bold mb-4">Produk tidak ditemukan</h2>
-        <Link to="/products" className="text-orange-500 underline">Kembali ke Katalog</Link>
+      <div className="text-center py-32 bg-stone-50 min-h-screen flex flex-col items-center gap-4">
+        <h2 className="text-2xl font-bold uppercase">Produk tidak ditemukan</h2>
+        <Link to="/products" className="text-xs font-bold uppercase tracking-wider text-black underline">
+          Kembali ke Katalog
+        </Link>
       </div>
     );
   }
 
   return (
-    <div data-layer="Detail Produk" className="DetailProduk w-full min-h-screen relative bg-stone-50 text-stone-900 font-semibold">
-      <div data-layer="Main Content" className="MainContent w-full max-w-[1280px] mx-auto px-6 sm:px-8 py-8 flex flex-col justify-start items-start gap-8">
+    <div data-layer="Detail Produk" className="DetailProduk w-full min-h-screen relative bg-stone-50 text-stone-900 font-['Inter'] font-semibold">
+      <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 py-8 flex flex-col gap-10">
 
         {/* Nav - Breadcrumb */}
-        <div data-layer="Nav - Breadcrumb" className="NavBreadcrumb w-full flex items-center text-xs font-semibold uppercase tracking-wide gap-2 text-stone-500">
+        <div className="w-full flex items-center text-xs font-semibold uppercase tracking-wider gap-2 text-stone-500">
           <Link to="/" className="hover:text-black">HOME</Link>
           <span>/</span>
-          <Link to="/products" className="hover:text-black">{product.kategori || 'CATALOG'}</Link>
+          <Link to="/products" className="hover:text-black">{product.kategori?.toUpperCase() || 'CATALOG'}</Link>
           <span>/</span>
           <span className="text-black font-bold">{product.nama}</span>
         </div>
 
         {/* Product Grid (Gallery + Details) */}
-        <div data-layer="Product Grid" className="ProductGrid w-full grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-14">
 
           {/* Left Column: Image Gallery */}
-          <div data-layer="Image Gallery" className="lg:col-span-7 flex flex-col gap-4">
-            <div className="w-full bg-neutral-200 overflow-hidden aspect-[4/3] sm:aspect-[16/10]">
+          <div className="lg:col-span-7 flex flex-col gap-4">
+            <div className="w-full bg-zinc-100 overflow-hidden aspect-[4/3] sm:aspect-[16/11] border border-neutral-200">
               <img
-                src={product.gambar_url || 'https://placehold.co/669x374'}
+                src={product.gambar_url || defaultDetailImg1}
                 alt={product.nama}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover grayscale contrast-115"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-neutral-200 overflow-hidden aspect-[3/4]">
+              <div className="bg-zinc-100 overflow-hidden aspect-[3/4] border border-neutral-200">
                 <img
-                  src={product.gambar_url || 'https://placehold.co/327x436'}
-                  alt={`${product.nama} detail 1`}
-                  className="w-full h-full object-cover"
+                  src={defaultDetailImg1}
+                  alt={`${product.nama} Detail 1`}
+                  className="w-full h-full object-cover grayscale contrast-115"
                 />
               </div>
-              <div className="bg-neutral-200 overflow-hidden aspect-[3/4]">
+              <div className="bg-zinc-100 overflow-hidden aspect-[3/4] border border-neutral-200">
                 <img
-                  src={product.gambar_url || 'https://placehold.co/325x435'}
-                  alt={`${product.nama} detail 2`}
-                  className="w-full h-full object-cover"
+                  src={defaultDetailImg2}
+                  alt={`${product.nama} Detail 2`}
+                  className="w-full h-full object-cover grayscale contrast-115"
                 />
               </div>
             </div>
           </div>
 
           {/* Right Column: Product Details */}
-          <div data-layer="Product Details" className="lg:col-span-5 flex flex-col justify-start items-start gap-6">
-            <div className="w-full pb-6 border-b border-neutral-200 flex flex-col gap-3.5">
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            <div className="pb-6 border-b border-neutral-200 flex flex-col gap-3">
               {product.stok <= 5 && (
-                <div className="inline-block px-3 py-1 border border-neutral-500 text-zinc-900 text-xs font-semibold uppercase tracking-wider self-start">
-                  LIMITED STOCK
-                </div>
+                <span className="inline-block px-2.5 py-1 bg-black text-white text-[10px] font-bold uppercase tracking-wider self-start">
+                  LIMITED RUN — STOK: {product.stok}
+                </span>
               )}
-              <h1 className="text-black text-3xl sm:text-5xl font-bold uppercase leading-tight">
+              <h1 className="text-black text-3xl sm:text-4xl font-bold uppercase leading-tight tracking-tight">
                 {product.nama}
               </h1>
-              <div className="text-orange-400 text-xl font-medium leading-5">
+              <div className="text-stone-900 text-2xl font-bold">
                 {formatPrice(product.harga)}
               </div>
             </div>
 
             {/* Description */}
-            <div className="w-full pb-6 border-b border-neutral-200 flex flex-col gap-4">
-              <p className="text-stone-700 text-base sm:text-lg font-normal leading-7">
-                {product.deskripsi || 'A masterclass in elevated minimalism. Tailored from premium materials designed to offer structure without stiffness.'}
+            <div className="pb-6 border-b border-neutral-200 flex flex-col gap-4 text-stone-700 text-sm font-normal leading-relaxed">
+              <p>
+                {product.deskripsi || 'A masterclass in elevated minimalism. Tailored from premium heavyweight textiles designed to offer architectural structure without stiffness.'}
               </p>
-              <ul className="flex flex-col gap-2 text-stone-500 text-sm">
+              <ul className="flex flex-col gap-2 text-stone-500 text-xs font-semibold uppercase tracking-wider">
                 <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-stone-500 rounded-full inline-block"></span>
-                  Italian Wool Blend (80% Wool, 20% Cashmere)
+                  <span className="w-1.5 h-1.5 bg-black rounded-full" />
+                  Heavyweight Organic Textile
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-stone-500 rounded-full inline-block"></span>
-                  Fully Lined Interior
+                  <span className="w-1.5 h-1.5 bg-black rounded-full" />
+                  Hand-finished Minimalist Construction
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-stone-500 rounded-full inline-block"></span>
-                  Hand-finished details
+                  <span className="w-1.5 h-1.5 bg-black rounded-full" />
+                  Tailored Relaxed Fit
                 </li>
               </ul>
             </div>
 
             {/* Color Selection */}
-            <div className="w-full flex flex-col gap-3">
-              <div className="text-xs font-semibold uppercase tracking-wide">
-                COLOR: <span className="text-stone-500 font-normal">{selectedColor}</span>
-              </div>
+            <div className="flex flex-col gap-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                COLOR: <span className="text-black">{selectedColor}</span>
+              </span>
               <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setSelectedColor('Charcoal')}
-                  className={`w-10 h-10 rounded-full bg-zinc-800 border-2 ${selectedColor === 'Charcoal' ? 'border-black ring-2 ring-white' : 'border-transparent'}`}
-                />
-                <button
-                  onClick={() => setSelectedColor('Black')}
-                  className={`w-10 h-10 rounded-full bg-neutral-900 border-2 ${selectedColor === 'Black' ? 'border-black ring-2 ring-white' : 'border-transparent'}`}
-                />
+                {[
+                  { name: 'Charcoal', bg: 'bg-zinc-800' },
+                  { name: 'Off-White', bg: 'bg-stone-200' },
+                  { name: 'Olive', bg: 'bg-stone-600' }
+                ].map((c) => (
+                  <button
+                    key={c.name}
+                    onClick={() => setSelectedColor(c.name)}
+                    className={`w-7 h-7 rounded-full ${c.bg} border-2 transition ${
+                      selectedColor === c.name ? 'border-black ring-2 ring-black/20' : 'border-transparent'
+                    }`}
+                    title={c.name}
+                  />
+                ))}
               </div>
             </div>
 
             {/* Size Selection */}
-            <div className="w-full flex flex-col gap-3">
-              <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wide">
-                <span>SIZE</span>
-                <button className="text-stone-500 underline font-semibold">Size Guide</button>
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider">
+                <span className="text-stone-500">SIZE: <span className="text-black">{selectedSize}</span></span>
+                <button className="text-stone-400 hover:text-black transition">Size Guide</button>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {['S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
+              <div className="grid grid-cols-4 gap-2.5">
+                {['S', 'M', 'L', 'XL'].map((sz) => (
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(sz)}
-                    className={`px-6 py-3 border text-base transition ${
+                    className={`py-3 text-xs font-bold uppercase tracking-wider border transition ${
                       selectedSize === sz
-                        ? 'bg-black text-white border-black font-medium'
-                        : 'border-neutral-500 text-zinc-900 hover:border-black'
+                        ? 'bg-black text-white border-black'
+                        : 'bg-white border-neutral-300 text-stone-700 hover:border-black'
                     }`}
                   >
                     {sz}
@@ -187,81 +198,76 @@ export const DetailProduk = () => {
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="w-full pt-4 flex flex-col gap-4">
-              <button
-                onClick={handleBuyNow}
-                className="w-full py-5 bg-black text-white text-lg font-normal uppercase leading-7 text-center hover:bg-neutral-800 transition"
-              >
-                ADD TO CART
-              </button>
-              <button
-                onClick={handleBuyNow}
-                className="w-full py-4 border border-black text-black text-lg font-normal uppercase leading-7 text-center hover:bg-black hover:text-white transition"
-              >
-                BUY NOW
-              </button>
-            </div>
+            {/* Action Button */}
+            <button
+              onClick={handleBuyNow}
+              disabled={product.stok <= 0}
+              className="w-full py-4 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition disabled:opacity-50 mt-2"
+            >
+              {product.stok > 0 ? 'BELI SEKARANG (INSTANT CHECKOUT)' : 'STOK HABIS'}
+            </button>
 
             {/* Accordions */}
-            <div className="w-full pt-6 border-t border-neutral-200 flex flex-col divide-y divide-neutral-200">
-              <div className="py-4">
+            <div className="border-t border-neutral-200 pt-4 flex flex-col divide-y divide-neutral-200 text-xs uppercase font-bold tracking-wider">
+              {/* Shipping & Returns */}
+              <div className="py-3">
                 <button
                   onClick={() => setOpenShipping(!openShipping)}
-                  className="w-full flex justify-between items-center text-black text-xl font-medium"
+                  className="w-full flex justify-between items-center py-2 text-left text-black"
                 >
-                  <span>Shipping &amp; Returns</span>
-                  {openShipping ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  <span>SHIPPING &amp; COMPLIMENTARY RETURNS</span>
+                  {openShipping ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openShipping && (
-                  <p className="pt-4 text-stone-700 text-sm leading-6">
-                    Complimentary standard shipping on all orders. Returns accepted within 14 days of delivery. Items must be in original condition with tags attached.
-                  </p>
+                  <div className="pt-2 text-stone-600 font-normal normal-case leading-relaxed text-xs">
+                    Pengiriman gratis ke seluruh Indonesia untuk pesanan di atas Rp 1.000.000. Pengembalian 7 hari tanpa biaya tambahan.
+                  </div>
                 )}
               </div>
-              <div className="py-4">
+
+              {/* Care Instructions */}
+              <div className="py-3">
                 <button
                   onClick={() => setOpenCare(!openCare)}
-                  className="w-full flex justify-between items-center text-black text-xl font-medium"
+                  className="w-full flex justify-between items-center py-2 text-left text-black"
                 >
-                  <span>Product Care</span>
-                  {openCare ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  <span>CARE &amp; MAINTENANCE</span>
+                  {openCare ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openCare && (
-                  <p className="pt-4 text-stone-700 text-sm leading-6">
-                    Dry clean only. Do not tumble dry. Cool iron if needed. Store in a garment bag in a cool, dry place.
-                  </p>
+                  <div className="pt-2 text-stone-600 font-normal normal-case leading-relaxed text-xs">
+                    Dry clean only atau cuci tangan dengan deterjen lembut air dingin. Hindari pengering putar untuk menjaga kerapian serat kain.
+                  </div>
                 )}
               </div>
             </div>
 
           </div>
-
         </div>
 
-        {/* Section - Complete the Look */}
-        <div data-layer="Section - Complete the Look" className="w-full py-16 bg-zinc-100 mt-12 flex flex-col gap-12 px-6 sm:px-8">
-          <h2 className="text-center text-black text-2xl sm:text-3xl font-semibold uppercase">
-            COMPLETE THE LOOK
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {recommendations.map((rec) => (
-              <Link key={rec.id} to={`/products/${rec.id}`} className="flex flex-col gap-3 group">
-                <div className="w-full h-96 bg-neutral-200 overflow-hidden">
-                  <img
-                    src={rec.gambar_url || 'https://placehold.co/386x512'}
-                    alt={rec.nama}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="text-center">
-                  <div className="text-black text-lg font-normal line-clamp-1">{rec.nama}</div>
-                  <div className="text-stone-500 text-base font-normal">{formatPrice(rec.harga)}</div>
-                </div>
-              </Link>
-            ))}
+        {/* Complete The Look Recommendations */}
+        {recommendations.length > 0 && (
+          <div className="pt-16 border-t border-neutral-200 flex flex-col gap-8">
+            <h2 className="text-black text-xl sm:text-2xl font-bold uppercase tracking-tight">
+              COMPLETE THE LOOK
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {recommendations.map((rec) => (
+                <Link key={rec.id} to={`/products/${rec.id}`} className="group flex flex-col">
+                  <div className="aspect-[3/4] bg-zinc-100 overflow-hidden border border-neutral-200 mb-3">
+                    <img
+                      src={rec.gambar_url || defaultDetailImg1}
+                      alt={rec.nama}
+                      className="w-full h-full object-cover grayscale contrast-115 transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="text-sm font-semibold text-black uppercase tracking-wide group-hover:text-orange-500 transition line-clamp-1">{rec.nama}</h3>
+                  <p className="text-sm text-stone-600 font-medium">{formatPrice(rec.harga)}</p>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>

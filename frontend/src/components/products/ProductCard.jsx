@@ -12,7 +12,6 @@ export const ProductCard = ({ product }) => {
     if (!isSignedIn) {
       navigate('/login');
     } else {
-      // Alihkan ke checkout langsung dengan state data produk (single-item purchase flow)
       navigate('/checkout', { state: { product } });
     }
   };
@@ -21,60 +20,50 @@ export const ProductCard = ({ product }) => {
     style: 'currency',
     currency: 'IDR',
     maximumFractionDigits: 0,
-  }).format(product.harga);
+  }).format(product.harga || 0);
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition duration-300 flex flex-col h-full">
+    <div className="group bg-white border border-neutral-200 transition duration-300 flex flex-col h-full font-['Inter'] font-semibold">
       {/* Product Image */}
-      <Link to={`/products/${product.id}`} className="relative block aspect-[4/3] overflow-hidden bg-stone-100">
+      <Link to={`/products/${product.id}`} className="relative block aspect-[3/4] overflow-hidden bg-zinc-100">
         <img
-          src={product.gambar_url || 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300'}
+          src={product.gambar_url || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800'}
           alt={product.nama}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500"
+          className="w-full h-full object-cover grayscale contrast-115 group-hover:scale-105 transition duration-500"
           loading="lazy"
         />
-        {product.stok <= 0 && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="text-white text-sm font-semibold tracking-wider uppercase px-3 py-1 bg-red-600 rounded">
-              Habis
-            </span>
-          </div>
+        {product.stok <= 3 && (
+          <span className="absolute top-3 left-3 bg-black text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5">
+            LOW STOCK
+          </span>
         )}
       </Link>
 
       {/* Product Info */}
-      <div className="p-5 flex-grow flex flex-col">
-        <span className="text-xs text-amber-800 font-semibold tracking-wider uppercase mb-1">Brand Lokal</span>
-        <h3 className="text-stone-900 font-serif font-bold text-lg mb-2 line-clamp-1 hover:text-amber-800 transition">
-          <Link to={`/products/${product.id}`}>{product.nama}</Link>
-        </h3>
-        <p className="text-stone-500 text-sm mb-4 line-clamp-2 flex-grow">
-          {product.deskripsi || 'Tidak ada deskripsi produk.'}
-        </p>
-
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-stone-100">
-          <div>
-            <span className="block text-xs text-stone-400">Harga</span>
-            <span className="text-lg font-bold text-amber-950">{formattedPrice}</span>
-          </div>
-          <span className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded">
-            Stok: {product.stok}
+      <div className="p-4 flex-grow flex flex-col justify-between gap-3">
+        <div>
+          <span className="text-[10px] text-orange-400 font-bold tracking-widest uppercase mb-1 block">
+            {product.kategori || 'ESSENTIALS'}
           </span>
+          <h3 className="text-black font-semibold text-sm uppercase tracking-wide line-clamp-1 group-hover:text-orange-500 transition">
+            <Link to={`/products/${product.id}`}>{product.nama}</Link>
+          </h3>
+          <p className="text-stone-500 text-xs font-normal mt-1 line-clamp-2">
+            {product.deskripsi || 'Elevated luxury essential.'}
+          </p>
         </div>
 
-        {/* CTA Button */}
-        <button
-          onClick={handleBuyNow}
-          disabled={product.stok <= 0}
-          className={`mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition duration-200 ${
-            product.stok > 0
-              ? 'bg-amber-900 hover:bg-amber-800 text-white shadow-sm'
-              : 'bg-stone-200 text-stone-400 cursor-not-allowed'
-          }`}
-        >
-          <ShoppingBag className="h-4 w-4" />
-          <span>Beli Instan</span>
-        </button>
+        <div className="pt-3 border-t border-neutral-100 flex items-center justify-between">
+          <span className="text-sm font-bold text-black">{formattedPrice}</span>
+          <button
+            onClick={handleBuyNow}
+            disabled={product.stok <= 0}
+            className="p-2 bg-black text-white hover:bg-neutral-800 transition disabled:opacity-50"
+            title="Beli Instan"
+          >
+            <ShoppingBag className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

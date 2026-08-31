@@ -4,7 +4,8 @@ export const getProducts = async (limit = 20, offset = 0, includeInactive = fals
   const response = await apiClient.get('/products', {
     params: { limit, offset, ...(includeInactive ? { include_inactive: true } : {}) },
   });
-  return response.data;
+  // Tangani format paginasi ({ data: [...], meta: {...} }) ataupun array langsung
+  return response.data?.data ?? response.data;
 };
 
 export const getProductById = async (id) => {

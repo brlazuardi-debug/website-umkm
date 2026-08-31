@@ -8,6 +8,20 @@ dist
 dist-ssr
 *.local
 
+# Python / Backend artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+*.db
+*.sqlite3
+.pytest_cache/
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/umkm.db
+
 # Environment / secrets (jangan pernah commit key Clerk!)
 .env
 .env.local
