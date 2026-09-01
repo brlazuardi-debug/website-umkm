@@ -1,5 +1,5 @@
 import React from 'react';
-import { QrCode, CheckCircle2, Copy } from 'lucide-react';
+import { CheckCircle2, Copy } from 'lucide-react';
 
 export const QRISPayment = ({ qrUrl, totalHarga, orderId }) => {
   const [copied, setCopied] = React.useState(false);
@@ -17,20 +17,20 @@ export const QRISPayment = ({ qrUrl, totalHarga, orderId }) => {
   };
 
   return (
-    <div className="bg-white border border-neutral-200 shadow-xs max-w-sm mx-auto overflow-hidden font-['Inter'] font-semibold">
+    <div className="bg-white border border-neutral-200 shadow-xs max-w-sm mx-auto overflow-hidden font-['Inter'] font-normal">
       {/* Header */}
       <div className="bg-black text-white p-6 text-center">
-        <span className="text-[10px] uppercase tracking-widest text-orange-400 font-bold block mb-1">
+        <span className="text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">
           PEMBAYARAN QRIS
         </span>
         <h3 className="text-2xl font-bold">{formattedPrice}</h3>
-        <p className="text-[11px] text-stone-400 mt-2 uppercase tracking-wider">Order ID: {orderId}</p>
+        <p className="text-[11px] text-stone-400 mt-2 uppercase tracking-wider font-normal">Order ID: {orderId}</p>
       </div>
 
       {/* QR Display */}
       <div className="p-6 flex flex-col items-center">
-        <div className="flex items-center gap-2 mb-4 bg-orange-50 text-orange-600 px-4 py-1 border border-orange-200 text-xs font-bold uppercase tracking-wider">
-          <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
+        <div className="flex items-center gap-2 mb-4 bg-amber-50 text-amber-700 px-4 py-1 border border-amber-200 text-xs font-bold uppercase tracking-wider">
+          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
           <span>Menunggu Pembayaran</span>
         </div>
 
@@ -49,7 +49,7 @@ export const QRISPayment = ({ qrUrl, totalHarga, orderId }) => {
         {/* Copy Order ID Button */}
         <button
           onClick={copyOrderId}
-          className="inline-flex items-center gap-1.5 text-xs text-stone-600 hover:text-black font-bold uppercase tracking-wider transition"
+          className="inline-flex items-center gap-1.5 text-xs text-stone-600 hover:text-black font-bold uppercase tracking-wider transition cursor-pointer"
         >
           {copied ? (
             <>

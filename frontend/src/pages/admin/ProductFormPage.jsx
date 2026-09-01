@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getProductById, createProduct, updateProduct } from '../../api/products';
-import { ArrowLeft, Save, Sparkles, Image, Package, Users, ShoppingBag, LogOut } from 'lucide-react';
+import { ArrowLeft, Save, Package, Users, ShoppingBag, LogOut } from 'lucide-react';
 
 export const ProductFormPage = () => {
   const { id } = useParams();
@@ -9,13 +9,14 @@ export const ProductFormPage = () => {
   const isEditMode = !!id;
 
   const [nama, setNama] = useState('');
+  const [kategori, setKategori] = useState('tops');
   const [deskripsi, setDeskripsi] = useState('');
   const [harga, setHarga] = useState(0);
   const [stok, setStok] = useState(0);
   const [gambarUrl, setGambarUrl] = useState('');
   const [isActive, setIsActive] = useState(true);
 
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -26,6 +27,7 @@ export const ProductFormPage = () => {
         setLoading(true);
         const data = await getProductById(id);
         setNama(data.nama);
+        setKategori(data.kategori || 'tops');
         setDeskripsi(data.deskripsi || '');
         setHarga(data.harga);
         setStok(data.stok);
@@ -62,6 +64,7 @@ export const ProductFormPage = () => {
 
       const payload = {
         nama,
+        kategori,
         deskripsi: deskripsi.trim() || null,
         harga,
         stok,
@@ -85,7 +88,7 @@ export const ProductFormPage = () => {
   };
 
   return (
-    <div data-layer="Admin Panel - Product Form" className="AdminPanelProductForm w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-semibold flex">
+    <div data-layer="Admin Panel - Product Form" className="AdminPanelProductForm w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-normal flex">
 
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white border-r border-neutral-200 min-h-screen flex flex-col justify-between p-6 shrink-0">
@@ -98,15 +101,15 @@ export const ProductFormPage = () => {
             <span className="text-stone-400 text-xs font-bold uppercase tracking-wider px-4 py-2">
               WORKSPACE
             </span>
-            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-semibold transition">
+            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-bold text-xs uppercase tracking-wider transition">
               <Package className="w-5 h-5 text-white" />
               <span>Product Management</span>
             </Link>
-            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-bold text-xs uppercase tracking-wider hover:bg-stone-100 transition">
               <Users className="w-5 h-5" />
               <span>Employee Management</span>
             </Link>
-            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-bold text-xs uppercase tracking-wider hover:bg-stone-100 transition">
               <ShoppingBag className="w-5 h-5" />
               <span>Cart &amp; Orders</span>
             </Link>
@@ -114,7 +117,7 @@ export const ProductFormPage = () => {
         </div>
 
         <div className="pt-4 border-t border-neutral-200">
-          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-semibold hover:text-black transition">
+          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-bold text-xs uppercase tracking-wider hover:text-black transition">
             <LogOut className="w-5 h-5" />
             <span>Sign Out</span>
           </Link>
@@ -156,10 +159,27 @@ export const ProductFormPage = () => {
                 type="text"
                 value={nama}
                 onChange={(e) => setNama(e.target.value)}
-                placeholder="Contoh: The Essential Overshirt"
+                placeholder="Contoh: Italian Tailored Black Blazer"
                 className="w-full py-2.5 px-3 bg-zinc-50 border border-neutral-300 text-sm text-black focus:outline-none focus:border-black"
                 required
               />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="kategori" className="text-xs font-bold uppercase tracking-wider text-stone-600">
+                Kategori Produk
+              </label>
+              <select
+                id="kategori"
+                value={kategori}
+                onChange={(e) => setKategori(e.target.value)}
+                className="w-full py-2.5 px-3 bg-zinc-50 border border-neutral-300 text-sm text-black focus:outline-none focus:border-black font-bold uppercase"
+              >
+                <option value="tops">TOPS (Jas, Kemeja, T-Shirt)</option>
+                <option value="bottoms">BOTTOMS (Celana, Sabuk, Sepatu)</option>
+                <option value="outerwear">OUTERWEAR (Coat, Blazer Wanita/Pria)</option>
+                <option value="accessories">ACCESSORIES (Jam Tangan, Sabuk)</option>
+              </select>
             </div>
 
             <div className="flex flex-col gap-1.5">

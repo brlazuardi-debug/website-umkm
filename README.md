@@ -1,6 +1,6 @@
 # Website UMKM (VARCA BRAND)
 
-Platform E-Commerce & Admin Management System untuk brand luxury & minimalist apparel UMKM — 100% presisi mengikuti spesifikasi desain Figma (`VuOuH1OTenDwxVZxTKMw9D/Brand-UMKM`) dengan Inter typography, visual monokrom modern, dan arsitektur RESTful API modular berstandar OpenAPI v3.1.
+Platform E-Commerce & Admin Management System untuk brand luxury & minimalist apparel UMKM — 100% presisi mengikuti spesifikasi desain modern dengan Inter typography, visual monokrom beraksen emas, katalog produk berwarna tajam, dukungan dwibahasa (Indonesia & English), dan arsitektur RESTful API modular berstandar OpenAPI v3.1.
 
 ---
 
@@ -22,19 +22,20 @@ website-umkm/
 ├── frontend/                 # React 19 SPA (Vite 8 + Tailwind CSS v4)
 │   ├── src/
 │   │   ├── api/              # Axios API clients (products, orders, carts, employees, transactions, users)
+│   │   ├── assets/           # Foto & aset visual (hero-bg.jpg)
 │   │   ├── components/       # UI Components, Layout, ProtectedRoute, Modals
-│   │   ├── context/          # BrandContext (VARCA Brand profile & Admin Demo Toggle)
+│   │   ├── context/          # BrandContext, LanguageContext (ID & EN), Admin Demo Auth
 │   │   ├── mocks/            # MSW (Mock Service Worker) browser handlers
 │   │   ├── pages/
 │   │   │   ├── admin/        # ProductManagement, ProductFormPage, CartOrders, EmployeeManagement
 │   │   │   └── customers/    # LandingPage, KatalogProduk, DetailProduk, CheckoutPage, OrderStatusPage, ProfilePage, Login, Register
 │   │   ├── App.jsx           # App Routing & Clerk Auth Provider
 │   │   └── main.jsx
+│   ├── vercel.json           # Konfigurasi rewrite SPA Vercel deployment
 │   └── package.json
 │
 ├── API_CONTRACT-3.md         # Source of Truth kontrak API v3 (30 Endpoints)
-├── PRD-UMKM-Website.md       # Product Requirements Document
-├── ERD.md                    # Entity Relationship Diagram & Database Schema
+├── README.md                 # Dokumentasi utama proyek & panduan penggunaan
 ├── summary.md                # Laporan perkembangan & status integrasi
 └── agents.md                 # Panduan teknis arsitektur untuk AI Agent & Developers
 ```
@@ -46,9 +47,10 @@ website-umkm/
 ### Frontend:
 - **Framework:** React 19, React Router 7
 - **Build Tool & Styling:** Vite 8, Tailwind CSS v4 (`@tailwindcss/vite`)
-- **Typography:** Inter Font Family (`font-['Inter']`, Semi-Bold / Medium focus)
+- **Typography:** Inter Font Family (`font-['Inter']`, Inter Bold untuk navigasi/judul/kategori, Inter Regular untuk deskripsi)
 - **Icons:** Lucide React (100% SVG, Zero Emojis)
-- **Auth:** Clerk Authentication (`@clerk/clerk-react`)
+- **Internationalization (i18n):** Native LanguageContext (Dukungan dwibahasa: Indonesia & English)
+- **Auth:** Clerk Authentication (`@clerk/clerk-react`) + 1-Click Admin Demo Login
 - **HTTP Client:** Axios (Global Interceptors & Auth Token Binding)
 
 ### Backend:
@@ -90,15 +92,32 @@ npm run build               # Production build
 ## 📱 Halaman & Fitur Utama
 
 ### Customer Experience (E-Commerce):
-1. **Landing Page (`/`)** — Hero Section dengan luxury background photography, Bento Grid New Arrivals, kategori Tops & Bottoms, serta Brand Manifesto.
-2. **Katalog Produk (`/products`)** — Tab kategori dinamis (*ALL, TOPS, BOTTOMS, OUTERWEAR, ACCESSORIES*), filter ukuran (*S, M, L, XL*), pengurutan harga, serta badge *LOW STOCK*.
-3. **Detail Produk (`/products/:id`)** — Multi-image gallery grid, color & size selector, expandable accordions (Shipping & Care), rekomendasi *Complete The Look*, dan Instant Checkout.
-4. **Checkout & Pembayaran (`/checkout`)** — Form info pembeli, alamat pengiriman, selector pembayaran QRIS / Transfer Bank, dan ringkasan pesanan.
-5. **Status Pesanan (`/order-status/:id`)** — Indikator status pesanan real-time dengan polling otomatis (PENDING $\rightarrow$ PAID / SHIPPED).
-6. **Profil Akun (`/profile`)** — Manajemen nama dan data profil terautentikasi.
+1. **Navigasi Dwibahasa & 3 Menu Inti** — `Beranda / Home`, `Katalog / Catalog`, `Tentang / About`, dilengkapi language switcher `ID | EN` dan animasi transisi active font weight.
+2. **Landing Page (`/`)** — Hero Section dengan luxury HD background photography, Bento Grid New Arrivals, kategori Tops & Suits, serta section **Our Philosophy** berlatar hitam *Black & White Noir* beraksen emas.
+3. **Katalog Produk (`/products`)** — Tab kategori dinamis:
+   - **Tops:** Italian Tailored Black Blazer, Architectural Poplin Dress Shirt, Heavyweight Minimalist Tee.
+   - **Bottoms:** Tailored Pleated Trousers, Handcrafted Leather Loafers, Minimalist Calfskin Leather Belt.
+   - **Outerwear:** Double-Faced Wool Coat Men, Structured Tailored Blazer Women.
+   - **Accessories:** Minimalist Noir Chronograph Watch.
+   Filter ukuran (*S, M, L, XL*), pengurutan harga, serta badge *LOW STOCK*.
+4. **Detail Produk (`/products/:id`)** — Multi-image gallery grid, color & size selector, expandable accordions (*Shipping & Care*), rekomendasi *Complete The Look*, dan Instant Checkout.
+5. **Checkout & Pembayaran (`/checkout`)** — 4 Section lengkap: *1. Customer Information*, *2. Shipping Address*, *3. Payment Method (QRIS / Bank Transfer)*, dan *4. Order Summary* dengan proteksi 256-bit secure checkout.
+6. **Status Pesanan (`/order-status/:id`)** — Indikator status pesanan real-time dengan polling otomatis (PENDING $\rightarrow$ PAID / SHIPPED).
+7. **Login & Register (`/login`, `/register`)** — Autentikasi terintegrasi Clerk + card akses instan **"AKUN KHUSUS ADMIN / OWNER"** (1-Click Demo) untuk kemudahan presentasi client.
 
 ### Admin & Operations Panel:
-1. **Product Management (`/admin`)** — Bento Metrics inventaris (*Total Products, Low Stock, Pending POS, Returns*), tabel inventaris produk, edit, dan hapus.
-2. **Product Form (`/admin/product/new` & `/admin/product/:id/edit`)** — Form penambahan dan pengeditan informasi produk serta upload gambar.
-3. **Cart & Orders Management (`/admin/cart-orders`)** — Metrik keranjang aktif & pesanan pending, tabel pesanan terbaru, serta **Modal Order Details** untuk pembaruan status pesanan (*PENDING $\rightarrow$ PAID $\rightarrow$ SHIPPED*).
-4. **Employee Management (`/admin/employee`)** — Direktori tim organisasi, inisial avatar, tag role, nomor kontak, serta **Modal New Employee** untuk pendaftaran staf baru.
+- **Manajemen Produk (`/admin`)** — Dashboard metrik, pencarian SKU, serta pembuatan produk baru via `/admin/product/new` dan pengeditan via `/admin/product/:id/edit`.
+- **Manajemen Keranjang & Pesanan (`/admin/cart-orders`)** — Pemantauan transaksi real-time, keranjang aktif, dan modal pengubahan status pengiriman pesanan.
+- **Manajemen Karyawan (`/admin/employee`)** — Direktori tim dengan modal *New Employee* dan kontrol 7-level RBAC.
+
+---
+
+## 🌐 Panduan Deployment ke Vercel (Frontend)
+
+1. Hubungkan repository GitHub ini ke akun [Vercel](https://vercel.com).
+2. Tentukan **Root Directory**: `frontend`.
+3. Set Environment Variable di Vercel Dashboard:
+   - `VITE_CLERK_PUBLISHABLE_KEY`: *(Publishable key dari Clerk dashboard)*
+   - `VITE_API_BASE_URL`: `/api/v1` *(atau origin URL backend produksi Anda)*
+4. File `frontend/vercel.json` telah siap mengelola seluruh routing SPA (Single Page Application rewrite).
+5. Klik **Deploy**.

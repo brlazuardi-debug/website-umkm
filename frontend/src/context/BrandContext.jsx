@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import heroBgImg from '../assets/hero-bg.jpg';
 
 const defaultBrand = {
   name: 'VARCA BRAND',
@@ -14,7 +15,7 @@ const defaultBrand = {
   email: 'concierge@varca.id',
   instagram: '@varca.official',
   website: 'varca.id',
-  hero_image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600',
+  hero_image: heroBgImg,
   logoUrl: null,
 };
 

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ClerkProvider, useAuth } from '@clerk/clerk-react';
 import { BrandProvider } from './context/BrandContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { setAuthTokenInterceptor } from './api/client';
 import Layout from './components/Layout';
 
@@ -17,6 +18,7 @@ import ProfilePage from './pages/customers/ProfilePage';
 
 // Admin Pages (Figma design structure)
 import ProductManagement from './pages/admin/ProductManagement';
+import ProductFormPage from './pages/admin/ProductFormPage';
 import CartOrders from './pages/admin/CartOrders';
 import EmployeeManagement from './pages/admin/EmployeeManagement';
 
@@ -92,6 +94,22 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/admin/product/new"
+          element={
+            <AdminRoute>
+              <ProductFormPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/product/:id/edit"
+          element={
+            <AdminRoute>
+              <ProductFormPage />
+            </AdminRoute>
+          }
+        />
+        <Route
           path="/admin/cart-orders"
           element={
             <AdminRoute>
@@ -118,11 +136,13 @@ const AppRoutes = () => {
 export function App() {
   return (
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-      <BrandProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </BrandProvider>
+      <LanguageProvider>
+        <BrandProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </BrandProvider>
+      </LanguageProvider>
     </ClerkProvider>
   );
 }

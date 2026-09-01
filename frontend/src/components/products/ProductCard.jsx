@@ -23,13 +23,13 @@ export const ProductCard = ({ product }) => {
   }).format(product.harga || 0);
 
   return (
-    <div className="group bg-white border border-neutral-200 transition duration-300 flex flex-col h-full font-['Inter'] font-semibold">
+    <div className="group bg-white border border-neutral-200 transition duration-300 flex flex-col h-full font-['Inter'] font-normal">
       {/* Product Image */}
-      <Link to={`/products/${product.id}`} className="relative block aspect-[3/4] overflow-hidden bg-zinc-100">
+      <Link to={`/products/${product.id}`} className="relative block aspect-[3/4] overflow-hidden bg-stone-100">
         <img
           src={product.gambar_url || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800'}
           alt={product.nama}
-          className="w-full h-full object-cover grayscale contrast-115 group-hover:scale-105 transition duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
           loading="lazy"
         />
         {product.stok <= 3 && (
@@ -42,10 +42,10 @@ export const ProductCard = ({ product }) => {
       {/* Product Info */}
       <div className="p-4 flex-grow flex flex-col justify-between gap-3">
         <div>
-          <span className="text-[10px] text-orange-400 font-bold tracking-widest uppercase mb-1 block">
+          <span className="text-[10px] text-amber-600 font-bold tracking-widest uppercase mb-1 block">
             {product.kategori || 'ESSENTIALS'}
           </span>
-          <h3 className="text-black font-semibold text-sm uppercase tracking-wide line-clamp-1 group-hover:text-orange-500 transition">
+          <h3 className="text-black font-bold text-sm uppercase tracking-wide line-clamp-1 group-hover:text-amber-700 transition">
             <Link to={`/products/${product.id}`}>{product.nama}</Link>
           </h3>
           <p className="text-stone-500 text-xs font-normal mt-1 line-clamp-2">
@@ -58,7 +58,7 @@ export const ProductCard = ({ product }) => {
           <button
             onClick={handleBuyNow}
             disabled={product.stok <= 0}
-            className="p-2 bg-black text-white hover:bg-neutral-800 transition disabled:opacity-50"
+            className="p-2 bg-black text-white hover:bg-neutral-800 transition disabled:opacity-50 cursor-pointer"
             title="Beli Instan"
           >
             <ShoppingBag className="w-4 h-4" />

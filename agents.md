@@ -1,20 +1,34 @@
-# agents.md — Panduan untuk AI Agent & Developer
+# agents.md — Panduan Teknis untuk AI Agent & Developer
 
 Repository: **website-umkm** (Fullstack Polyrepo: React 19 Frontend + FastAPI Backend).
-Dibaca otomatis oleh AI agent dan developer sebelum melakukan modifikasi kode.
+Wajib dibaca dan dipahami sebelum melakukan modifikasi kode pada repositori ini.
 
 ---
 
-## 1. Konteks Bisnis & Brand
+## 1. Konteks Bisnis & Standar Desain
 - **Brand Identity:** **VARCA BRAND** (Luxury Minimalist Fashion & Tailored Apparel UMKM).
-- **Desain Acuan:** 100% presisi mengikuti spesifikasi Figma (`VuOuH1OTenDwxVZxTKMw9D/Brand-UMKM`) & screenshot acuan.
-- **Tipografi:** Wajib menggunakan font **Inter** dengan bobot **Semi-Bold / Medium** (`font-['Inter']`, `font-semibold`, `font-bold`).
-- **Palet Warna:** Estetika monokrom modern (`#09090B`, `#18181B`, `#FAFAF9`) dengan aksen oranye terukur (`#FB923C` / `text-orange-400`). **DILARANG** menggunakan warna cokelat/amber lama (`amber-*`).
-- **Ikonografi:** 100% SVG menggunakan **Lucide React**. **DILARANG** menggunakan emoji liar sebagai ikon tombol/status.
+- **Tipografi Global:** 
+  - **Inter Bold (`font-bold` / 700):** Wajib untuk navbar links, judul halaman (h1, h2, h3), nama produk, kategori, badge status, dan tombol aksi (CTA).
+  - **Inter Regular (`font-normal` / 400):** Wajib untuk body text, deskripsi produk, paragraf filosofi, form input/placeholder, dan instruksi care/shipping.
+- **Palet Warna:** Estetika monokrom modern (`#09090B`, `#18181B`, `#FAFAF9`) dengan aksen emas/amber mewah (`text-amber-400` / `#D4AF37`).
+- **Visual Produk:** Seluruh foto produk katalog dan galeri wajib **berwarna tajam & elegan** (tanpa filter grayscale yang membuat produk terlihat mati).
+- **Section Our Philosophy:** Desain berlatar hitam pekat (`bg-black`), foto latar artistik *Black & White Noir*, aksen headline emas, dan teks narasi reguler.
+- **Ikonografi:** 100% SVG menggunakan **Lucide React** (Zero emojis sebagai icon antarmuka).
 
 ---
 
-## 2. Arsitektur Backend (FastAPI Domain-Driven)
+## 2. Navigasi & Sistem Dwibahasa (i18n)
+- **Modul:** `frontend/src/context/LanguageContext.jsx` menyediakan state bahasa (`id` dan `en`) dengan persistensi `localStorage`.
+- **Menu Navigasi Utama:**
+  - Indonesia: `Beranda`, `Katalog`, `Tentang`
+  - English: `Home`, `Catalog`, `About`
+- **Animasi Aktif Navbar:**
+  - Halaman aktif: `font-bold text-black scale-105` + garis indikator bawah (`h-0.5 bg-black`).
+  - Halaman tidak aktif: `font-normal text-stone-500 hover:text-black hover:font-bold transition-all duration-300`.
+
+---
+
+## 3. Arsitektur Backend (FastAPI Domain-Driven)
 
 Backend berada di subdirektori `backend/` dengan struktur modular domain-driven:
 - `app/modules/users/` — Profil pengguna & Clerk user provisioning (`/users/me`).
@@ -39,32 +53,39 @@ Seluruh endpoint di-mount secara ganda di root (`/`) dan prefix versi (`/api/v1`
 
 ---
 
-## 3. Integrasi Frontend (React 19 / Axios)
+## 4. Frontend Routing & CRUD Standards (React 19)
 
-Frontend berada di subdirektori `frontend/` menggunakan Axios client terpusat di `src/api/client.js`:
-- `src/api/products.js` — Menangani respons paginasi (`response.data?.data || response.data`).
-- `src/api/orders.js` — Fetch list order & update status pesanan.
-- `src/api/carts.js` — Fetch data keranjang belanja aktif/abandoned.
-- `src/api/employees.js` — Fetch list & create karyawan.
-- `src/api/transactions.js` — Inisiasi checkout QRIS & polling status.
-- `src/api/users.js` — Sinkronisasi profil pengguna.
+- `App.jsx` mengelola rute pembeli dan rute admin terproteksi (`AdminRoute`):
+  - `/` $\rightarrow$ `LandingPage`
+  - `/products` $\rightarrow$ `KatalogProduk` (Filter Tops, Bottoms, Outerwear, Accessories)
+  - `/products/:id` $\rightarrow$ `DetailProduk`
+  - `/checkout` $\rightarrow$ `CheckoutPage` (4-Section: Customer Info, Shipping Address, Payment Method, Order Summary)
+  - `/order-status/:id` $\rightarrow$ `OrderStatusPage` (Polling real-time QRIS/Bank)
+  - `/login` $\rightarrow$ `LoginPage` (Clerk Auth + 1-Click Admin Demo Access)
+  - `/admin` $\rightarrow$ `ProductManagement`
+  - `/admin/product/new` $\rightarrow$ `ProductFormPage`
+  - `/admin/product/:id/edit` $\rightarrow$ `ProductFormPage`
+  - `/admin/cart-orders` $\rightarrow$ `CartOrders`
+  - `/admin/employee` $\rightarrow$ `EmployeeManagement`
 
 ---
 
-## 4. Testing & Quality Gates
+## 5. Testing & Quality Gates
 
 Setiap perubahan wajib memenuhi standar berikut:
 1. **Backend Tests:**
    ```bash
    cd backend
-   .venv/bin/pytest -v
+   source .venv/bin/activate
+   pytest -v
    ```
    Harus menghasilkan **13/13 passing tests** (100% test coverage).
-2. **Frontend Build:**
+2. **Frontend Build & Lint:**
    ```bash
    cd frontend
+   npm run lint
    npm run build
    ```
    Harus berhasil (*0 errors, 0 warnings*).
-3. **Kompatibilitas Responsif:**
-   Pastikan antarmuka tidak mengalami *layout shift* atau *horizontal overflow* pada viewport mobile (375px), tablet (768px), dan desktop (1280px+).
+3. **Deployment Vercel:**
+   File `frontend/vercel.json` bertindak sebagai rewrite engine untuk mencegah 404 pada rute langsung SPA.

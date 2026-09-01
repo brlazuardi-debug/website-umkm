@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
+import { useLanguage } from '../../context/LanguageContext';
 import { getProductById, getProducts } from '../../api/products';
-import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export const DetailProduk = () => {
   const { id } = useParams();
   const { isSignedIn } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedColor, setSelectedColor] = useState('Charcoal');
+  const [selectedColor, setSelectedColor] = useState('Noir');
   const [selectedSize, setSelectedSize] = useState('M');
   const [openShipping, setOpenShipping] = useState(true);
   const [openCare, setOpenCare] = useState(false);
@@ -73,11 +75,11 @@ export const DetailProduk = () => {
   }
 
   return (
-    <div data-layer="Detail Produk" className="DetailProduk w-full min-h-screen relative bg-stone-50 text-stone-900 font-['Inter'] font-semibold">
+    <div data-layer="Detail Produk" className="DetailProduk w-full min-h-screen relative bg-stone-50 text-stone-900 font-['Inter'] font-normal">
       <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 py-8 flex flex-col gap-10">
 
         {/* Nav - Breadcrumb */}
-        <div className="w-full flex items-center text-xs font-semibold uppercase tracking-wider gap-2 text-stone-500">
+        <div className="w-full flex items-center text-xs font-bold uppercase tracking-wider gap-2 text-stone-500">
           <Link to="/" className="hover:text-black">HOME</Link>
           <span>/</span>
           <Link to="/products" className="hover:text-black">{product.kategori?.toUpperCase() || 'CATALOG'}</Link>
@@ -90,26 +92,26 @@ export const DetailProduk = () => {
 
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-7 flex flex-col gap-4">
-            <div className="w-full bg-zinc-100 overflow-hidden aspect-[4/3] sm:aspect-[16/11] border border-neutral-200">
+            <div className="w-full bg-stone-100 overflow-hidden aspect-[4/3] sm:aspect-[16/11] border border-neutral-200">
               <img
                 src={product.gambar_url || defaultDetailImg1}
                 alt={product.nama}
-                className="w-full h-full object-cover grayscale contrast-115"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-zinc-100 overflow-hidden aspect-[3/4] border border-neutral-200">
+              <div className="bg-stone-100 overflow-hidden aspect-[3/4] border border-neutral-200">
                 <img
                   src={defaultDetailImg1}
                   alt={`${product.nama} Detail 1`}
-                  className="w-full h-full object-cover grayscale contrast-115"
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="bg-zinc-100 overflow-hidden aspect-[3/4] border border-neutral-200">
+              <div className="bg-stone-100 overflow-hidden aspect-[3/4] border border-neutral-200">
                 <img
                   src={defaultDetailImg2}
                   alt={`${product.nama} Detail 2`}
-                  className="w-full h-full object-cover grayscale contrast-115"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
@@ -136,7 +138,7 @@ export const DetailProduk = () => {
               <p>
                 {product.deskripsi || 'A masterclass in elevated minimalism. Tailored from premium heavyweight textiles designed to offer architectural structure without stiffness.'}
               </p>
-              <ul className="flex flex-col gap-2 text-stone-500 text-xs font-semibold uppercase tracking-wider">
+              <ul className="flex flex-col gap-2 text-stone-500 text-xs font-bold uppercase tracking-wider">
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-black rounded-full" />
                   Heavyweight Organic Textile
@@ -154,8 +156,8 @@ export const DetailProduk = () => {
 
             {/* Color Selection */}
             <div className="flex flex-col gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                COLOR: <span className="text-black">{selectedColor}</span>
+              <span className="text-xs uppercase tracking-wider text-stone-500 font-normal">
+                COLOR: <span className="text-black font-bold">{selectedColor}</span>
               </span>
               <div className="flex items-center gap-3">
                 {[
@@ -166,8 +168,8 @@ export const DetailProduk = () => {
                   <button
                     key={c.name}
                     onClick={() => setSelectedColor(c.name)}
-                    className={`w-7 h-7 rounded-full ${c.bg} border-2 transition ${
-                      selectedColor === c.name ? 'border-black ring-2 ring-black/20' : 'border-transparent'
+                    className={`w-8 h-8 rounded-full ${c.bg} border-2 transition-all duration-300 cursor-pointer ${
+                      selectedColor === c.name ? 'border-black ring-2 ring-black/40 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
                     }`}
                     title={c.name}
                   />
@@ -177,19 +179,19 @@ export const DetailProduk = () => {
 
             {/* Size Selection */}
             <div className="flex flex-col gap-3">
-              <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider">
-                <span className="text-stone-500">SIZE: <span className="text-black">{selectedSize}</span></span>
-                <button className="text-stone-400 hover:text-black transition">Size Guide</button>
+              <div className="flex justify-between items-center text-xs uppercase tracking-wider">
+                <span className="text-stone-500 font-normal">SIZE: <span className="text-black font-bold">{selectedSize}</span></span>
+                <button className="text-stone-400 hover:text-black transition-colors duration-200 cursor-pointer font-normal">Size Guide</button>
               </div>
               <div className="grid grid-cols-4 gap-2.5">
                 {['S', 'M', 'L', 'XL'].map((sz) => (
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(sz)}
-                    className={`py-3 text-xs font-bold uppercase tracking-wider border transition ${
+                    className={`py-3 text-xs uppercase tracking-wider border transition-all duration-300 cursor-pointer ${
                       selectedSize === sz
-                        ? 'bg-black text-white border-black'
-                        : 'bg-white border-neutral-300 text-stone-700 hover:border-black'
+                        ? 'bg-black text-white border-black font-bold scale-[1.02] shadow-xs'
+                        : 'bg-white border-neutral-300 text-stone-500 font-normal hover:border-black hover:text-black hover:font-bold'
                     }`}
                   >
                     {sz}
@@ -202,9 +204,9 @@ export const DetailProduk = () => {
             <button
               onClick={handleBuyNow}
               disabled={product.stok <= 0}
-              className="w-full py-4 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition disabled:opacity-50 mt-2"
+              className="w-full py-4 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition disabled:opacity-50 mt-2 cursor-pointer shadow-md"
             >
-              {product.stok > 0 ? 'BELI SEKARANG (INSTANT CHECKOUT)' : 'STOK HABIS'}
+              {product.stok > 0 ? t.detail.buyNow : t.detail.outOfStock}
             </button>
 
             {/* Accordions */}
@@ -213,14 +215,14 @@ export const DetailProduk = () => {
               <div className="py-3">
                 <button
                   onClick={() => setOpenShipping(!openShipping)}
-                  className="w-full flex justify-between items-center py-2 text-left text-black"
+                  className="w-full flex justify-between items-center py-2 text-left text-black cursor-pointer"
                 >
-                  <span>SHIPPING &amp; COMPLIMENTARY RETURNS</span>
+                  <span>{t.detail.shippingReturns}</span>
                   {openShipping ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openShipping && (
                   <div className="pt-2 text-stone-600 font-normal normal-case leading-relaxed text-xs">
-                    Pengiriman gratis ke seluruh Indonesia untuk pesanan di atas Rp 1.000.000. Pengembalian 7 hari tanpa biaya tambahan.
+                    {t.detail.shippingDesc}
                   </div>
                 )}
               </div>
@@ -229,14 +231,14 @@ export const DetailProduk = () => {
               <div className="py-3">
                 <button
                   onClick={() => setOpenCare(!openCare)}
-                  className="w-full flex justify-between items-center py-2 text-left text-black"
+                  className="w-full flex justify-between items-center py-2 text-left text-black cursor-pointer"
                 >
-                  <span>CARE &amp; MAINTENANCE</span>
+                  <span>{t.detail.careMaintenance}</span>
                   {openCare ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openCare && (
                   <div className="pt-2 text-stone-600 font-normal normal-case leading-relaxed text-xs">
-                    Dry clean only atau cuci tangan dengan deterjen lembut air dingin. Hindari pengering putar untuk menjaga kerapian serat kain.
+                    {t.detail.careDesc}
                   </div>
                 )}
               </div>
@@ -249,20 +251,20 @@ export const DetailProduk = () => {
         {recommendations.length > 0 && (
           <div className="pt-16 border-t border-neutral-200 flex flex-col gap-8">
             <h2 className="text-black text-xl sm:text-2xl font-bold uppercase tracking-tight">
-              COMPLETE THE LOOK
+              {t.detail.completeTheLook}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {recommendations.map((rec) => (
                 <Link key={rec.id} to={`/products/${rec.id}`} className="group flex flex-col">
-                  <div className="aspect-[3/4] bg-zinc-100 overflow-hidden border border-neutral-200 mb-3">
+                  <div className="aspect-[3/4] bg-stone-100 overflow-hidden border border-neutral-200 mb-3">
                     <img
-                      src={rec.gambar_url || defaultDetailImg1}
+                      src={rec.gambar_url}
                       alt={rec.nama}
-                      className="w-full h-full object-cover grayscale contrast-115 transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <h3 className="text-sm font-semibold text-black uppercase tracking-wide group-hover:text-orange-500 transition line-clamp-1">{rec.nama}</h3>
-                  <p className="text-sm text-stone-600 font-medium">{formatPrice(rec.harga)}</p>
+                  <h3 className="text-sm font-bold text-black uppercase tracking-wide group-hover:text-amber-700 transition line-clamp-1">{rec.nama}</h3>
+                  <p className="text-sm text-stone-600 font-normal">{formatPrice(rec.harga)}</p>
                 </Link>
               ))}
             </div>

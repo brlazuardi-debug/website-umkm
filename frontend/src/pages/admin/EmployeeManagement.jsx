@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Plus, Mail, Phone, Package, Users, ShoppingBag, LogOut, X, Shield } from 'lucide-react';
-import { getEmployees, createEmployee, updateEmployeeStatus, deleteEmployee } from '../../api/employees';
+import { Search, Plus, Mail, Phone, Package, Users, ShoppingBag, LogOut, X } from 'lucide-react';
+import { getEmployees, createEmployee } from '../../api/employees';
 
 export const EmployeeManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,7 +70,7 @@ export const EmployeeManagement = () => {
   const roleList = ['OWNER', 'ADMIN', 'STORE MANAGER', 'WAREHOUSE', 'CUSTOMER SERVICE', 'CASHIER', 'STAFF'];
 
   return (
-    <div data-layer="Admin Panel - Manajemen Karyawan" className="AdminPanelManajemenKaryawan w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-semibold flex">
+    <div data-layer="Admin Panel - Manajemen Karyawan" className="AdminPanelManajemenKaryawan w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-normal flex">
 
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white border-r border-neutral-200 min-h-screen flex flex-col justify-between p-6 shrink-0">
@@ -83,15 +83,15 @@ export const EmployeeManagement = () => {
             <span className="text-stone-400 text-xs font-bold uppercase tracking-wider px-4 py-2">
               WORKSPACE
             </span>
-            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-normal text-xs uppercase tracking-wider hover:bg-stone-100 hover:text-black hover:font-bold transition-all duration-200">
               <Package className="w-5 h-5" />
               <span>Product Management</span>
             </Link>
-            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-semibold transition">
+            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs">
               <Users className="w-5 h-5 text-white" />
               <span>Employee Management</span>
             </Link>
-            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-normal text-xs uppercase tracking-wider hover:bg-stone-100 hover:text-black hover:font-bold transition-all duration-200">
               <ShoppingBag className="w-5 h-5" />
               <span>Cart &amp; Orders</span>
             </Link>
@@ -99,7 +99,7 @@ export const EmployeeManagement = () => {
         </div>
 
         <div className="pt-4 border-t border-neutral-200">
-          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-semibold hover:text-black transition">
+          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-bold text-xs uppercase tracking-wider hover:text-black transition">
             <LogOut className="w-5 h-5" />
             <span>Sign Out</span>
           </Link>

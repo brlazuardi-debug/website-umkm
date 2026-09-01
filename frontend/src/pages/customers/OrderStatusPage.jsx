@@ -69,11 +69,11 @@ export const OrderStatusPage = () => {
   const StatusIcon = meta.icon;
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-semibold py-12 px-6">
+    <div className="min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-normal py-12 px-6">
       <div className="max-w-xl mx-auto flex flex-col gap-6">
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 text-stone-500 hover:text-black text-xs font-semibold uppercase tracking-wider transition"
+          className="inline-flex items-center gap-2 text-stone-500 hover:text-black text-xs font-bold uppercase tracking-wider transition cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Kembali ke Katalog</span>
@@ -84,7 +84,7 @@ export const OrderStatusPage = () => {
             <StatusIcon className="h-8 w-8" />
           </div>
 
-          <span className="text-orange-400 text-xs font-bold uppercase tracking-widest block mb-1">TRANSACTION CONFIRMATION</span>
+          <span className="text-amber-600 text-xs font-bold uppercase tracking-widest block mb-1">TRANSACTION CONFIRMATION</span>
           <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight text-black mb-3">
             STATUS PESANAN
           </h1>
@@ -104,17 +104,17 @@ export const OrderStatusPage = () => {
             </div>
           )}
 
-          <div className="w-full pt-6 border-t border-neutral-200 flex flex-col gap-3 text-left text-xs font-semibold uppercase tracking-wider">
+          <div className="w-full pt-6 border-t border-neutral-200 flex flex-col gap-3 text-left text-xs uppercase tracking-wider">
             <div className="flex justify-between">
-              <span className="text-stone-500">ORDER ID:</span>
+              <span className="text-stone-500 font-normal">ORDER ID:</span>
               <span className="font-bold text-black">{transaction.midtrans_order_id || transaction.id}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-stone-500">TOTAL PEMBAYARAN:</span>
+              <span className="text-stone-500 font-normal">TOTAL PEMBAYARAN:</span>
               <span className="font-bold text-black text-sm">{formattedPrice}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-stone-500">METODE:</span>
+              <span className="text-stone-500 font-normal">METODE:</span>
               <span className="font-bold text-black">{transaction.payment_type || 'QRIS'}</span>
             </div>
           </div>

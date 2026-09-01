@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getProducts, deleteProduct } from '../../api/products';
-import { Search, Plus, Edit3, Trash2, Package, Users, ShoppingBag, LogOut, Download } from 'lucide-react';
+import { Search, Plus, Edit3, Trash2, Package, Users, ShoppingBag, LogOut } from 'lucide-react';
 
 export const ProductManagement = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
 
   const fetchAllProducts = async () => {
     try {
@@ -50,7 +49,7 @@ export const ProductManagement = () => {
   );
 
   return (
-    <div data-layer="Admin Panel - Manajemen Produk" className="AdminPanelManajemenProduk w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-semibold flex">
+    <div data-layer="Admin Panel - Manajemen Produk" className="AdminPanelManajemenProduk w-full min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-normal flex">
 
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white border-r border-neutral-200 min-h-screen flex flex-col justify-between p-6 shrink-0">
@@ -63,15 +62,15 @@ export const ProductManagement = () => {
             <span className="text-stone-400 text-xs font-bold uppercase tracking-wider px-4 py-2">
               WORKSPACE
             </span>
-            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-semibold transition">
+            <Link to="/admin" className="flex items-center gap-3 px-4 py-3 bg-black text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs">
               <Package className="w-5 h-5 text-white" />
               <span>Product Management</span>
             </Link>
-            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin/employee" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-normal text-xs uppercase tracking-wider hover:bg-stone-100 hover:text-black hover:font-bold transition-all duration-200">
               <Users className="w-5 h-5" />
               <span>Employee Management</span>
             </Link>
-            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-600 font-semibold hover:bg-stone-100 transition">
+            <Link to="/admin/cart-orders" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-normal text-xs uppercase tracking-wider hover:bg-stone-100 hover:text-black hover:font-bold transition-all duration-200">
               <ShoppingBag className="w-5 h-5" />
               <span>Cart &amp; Orders</span>
             </Link>
@@ -79,7 +78,7 @@ export const ProductManagement = () => {
         </div>
 
         <div className="pt-4 border-t border-neutral-200">
-          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-semibold hover:text-black transition">
+          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-stone-500 font-bold text-xs uppercase tracking-wider hover:text-black transition">
             <LogOut className="w-5 h-5" />
             <span>Sign Out</span>
           </Link>
@@ -200,16 +199,16 @@ export const ProductManagement = () => {
                     filteredProducts.map((p) => (
                       <tr key={p.id} className="hover:bg-stone-50/50 transition">
                         <td className="pl-6 pr-4 py-4 flex items-center gap-4">
-                          <div className="w-14 h-16 bg-zinc-100 overflow-hidden shrink-0 border border-neutral-200">
+                          <div className="w-14 h-16 bg-stone-100 overflow-hidden shrink-0 border border-neutral-200">
                             <img
                               src={p.gambar_url || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800'}
                               alt={p.nama}
-                              className="w-full h-full object-cover grayscale contrast-115"
+                              className="w-full h-full object-cover"
                             />
                           </div>
                           <div>
                             <div className="text-black font-bold uppercase text-sm">{p.nama}</div>
-                            <div className="text-stone-500 text-xs uppercase">{p.kategori || 'Apparel'}</div>
+                            <div className="text-stone-500 text-xs font-normal uppercase">{p.kategori || 'Apparel'}</div>
                           </div>
                         </td>
                         <td className="p-4 text-stone-500 font-mono text-xs">SKU-{p.id.slice(0, 6)}</td>

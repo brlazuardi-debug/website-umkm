@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getMyProfile, updateMyProfile } from '../../api/users';
-import { Save, UserRound, Shield } from 'lucide-react';
+import { Save } from 'lucide-react';
 
 export const ProfilePage = () => {
   const [name, setName] = useState('');
@@ -55,10 +55,10 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-semibold py-12 px-6">
+    <div className="min-h-screen bg-stone-50 text-stone-900 font-['Inter'] font-normal py-12 px-6">
       <div className="max-w-xl mx-auto flex flex-col gap-8">
         <div>
-          <span className="text-orange-400 text-xs font-bold uppercase tracking-widest block mb-1">ACCOUNT SETTINGS</span>
+          <span className="text-amber-600 text-xs font-bold uppercase tracking-widest block mb-1">ACCOUNT SETTINGS</span>
           <h1 className="text-3xl font-bold uppercase tracking-tight text-black">
             PROFIL PENGGUNA
           </h1>
