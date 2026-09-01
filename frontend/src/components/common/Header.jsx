@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ShieldCheck, LogIn, UserRound } from 'lucide-react';
 
 export const Header = () => {
-  const { isAdminDemo, setAdminDemo } = useBrand();
+  const { isAdminDemo, setAdminDemo, isCustomerDemo, setCustomerDemo } = useBrand();
   const { language, setLanguage, t } = useLanguage();
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
@@ -85,29 +85,29 @@ export const Header = () => {
               </button>
             </div>
 
-            {import.meta.env.DEV && (
-              <button
-                onClick={() => {
-                  setAdminDemo(!isAdminDemo);
-                  if (!isAdminDemo) {
-                    navigate('/admin');
-                  } else {
-                    navigate('/');
-                  }
-                }}
-                title="Toggle Role Admin (Developer Demo)"
-                className={`px-3 py-1.5 rounded text-xs tracking-wide uppercase transition-all duration-200 border cursor-pointer ${
-                  isAdminDemo
-                    ? 'bg-rose-50 text-red-700 border-rose-200 font-bold shadow-xs'
-                    : 'bg-white text-stone-600 border-neutral-200 font-normal hover:border-black hover:text-black'
-                }`}
-              >
-                <ShieldCheck className="h-3.5 w-3.5 inline mr-1" />
-                <span>{isAdminDemo ? t.nav.adminOn : t.nav.demoAdmin}</span>
-              </button>
-            )}
+            {/* Admin Demo Button (Bekerja di Dev & Production) */}
+            <button
+              onClick={() => {
+                const next = !isAdminDemo;
+                setAdminDemo(next);
+                if (next) {
+                  navigate('/admin');
+                } else {
+                  navigate('/');
+                }
+              }}
+              title="Toggle Role Admin / Mode Presentasi"
+              className={`px-3 py-1.5 rounded text-xs tracking-wide uppercase transition-all duration-200 border cursor-pointer ${
+                isAdminDemo
+                  ? 'bg-rose-50 text-red-700 border-rose-200 font-bold shadow-xs'
+                  : 'bg-white text-stone-600 border-neutral-200 font-normal hover:border-black hover:text-black'
+              }`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5 inline mr-1" />
+              <span>{isAdminDemo ? t.nav.adminOn : t.nav.demoAdmin}</span>
+            </button>
 
-            {isSignedIn ? (
+            {isSignedIn || isCustomerDemo ? (
               <div className="flex items-center gap-3">
                 <Link
                   to="/profile"
@@ -128,7 +128,17 @@ export const Header = () => {
                     {t.nav.adminPanel}
                   </Link>
                 )}
-                <UserButton afterSignOutUrl="/" />
+                {isSignedIn ? (
+                  <UserButton afterSignOutUrl="/" />
+                ) : (
+                  <button
+                    onClick={() => setCustomerDemo(false)}
+                    className="text-[11px] font-bold text-stone-500 hover:text-black uppercase cursor-pointer"
+                    title="Keluar dari sesi demo"
+                  >
+                    KELUAR
+                  </button>
+                )}
               </div>
             ) : (
               <Link

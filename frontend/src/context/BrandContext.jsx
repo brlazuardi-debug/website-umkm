@@ -23,11 +23,32 @@ const BrandContext = createContext(undefined);
 
 export const BrandProvider = ({ children }) => {
   const [brand] = useState(defaultBrand);
-  // Toggle demo admin untuk frontend-only dev / bypass Clerk role metadata
-  const [isAdminDemo, setAdminDemo] = useState(false);
+  // Toggle demo auth untuk presentasi & bypass Clerk jika key belum di-binding ke production domain
+  const [isAdminDemo, setAdminDemo] = useState(() => {
+    return localStorage.getItem('varca_admin_demo') === 'true';
+  });
+  const [isCustomerDemo, setCustomerDemo] = useState(() => {
+    return localStorage.getItem('varca_customer_demo') === 'true';
+  });
+
+  const toggleAdminDemo = (val) => {
+    setAdminDemo(val);
+    localStorage.setItem('varca_admin_demo', val ? 'true' : 'false');
+  };
+
+  const toggleCustomerDemo = (val) => {
+    setCustomerDemo(val);
+    localStorage.setItem('varca_customer_demo', val ? 'true' : 'false');
+  };
 
   return (
-    <BrandContext.Provider value={{ brand, isAdminDemo, setAdminDemo }}>
+    <BrandContext.Provider value={{
+      brand,
+      isAdminDemo,
+      setAdminDemo: toggleAdminDemo,
+      isCustomerDemo,
+      setCustomerDemo: toggleCustomerDemo,
+    }}>
       {children}
     </BrandContext.Provider>
   );

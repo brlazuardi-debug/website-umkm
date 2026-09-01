@@ -3,19 +3,16 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 
-// Fungsi untuk mengaktifkan Mock Service Worker di mode development
+// Aktifkan Mock Service Worker untuk simulasi REST API lokal & Vercel deployment
 async function enableMocking() {
-  // Hanya aktifkan MSW jika di mode development
-  if (!import.meta.env.DEV) {
-    return;
+  try {
+    const { worker } = await import('./mocks/browser');
+    return await worker.start({
+      onUnhandledRequest: 'bypass',
+    });
+  } catch (err) {
+    console.warn('[MSW] Mocking service worker could not start, falling back to direct API clients:', err);
   }
-
-  const { worker } = await import('./mocks/browser');
-
-  // Mulai worker MSW untuk meng-intercept request API ke /api/v1/* secara lokal
-  return worker.start({
-    onUnhandledRequest: 'bypass', // Lewatkan request aset statis non-API
-  });
 }
 
 enableMocking().then(() => {
