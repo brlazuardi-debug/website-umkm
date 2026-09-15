@@ -1,8 +1,9 @@
-# API Contract v3 — Backend UMKM
+# API Contract v3 — Backend UMKM (Eksternal Prod)
 
-> Source of truth: `/docs` (OpenAPI auto-generated). Dokumen ini ringkasan.
+> Source of truth: `https://umkmvarca.renaldi.my.id/docs` (OpenAPI auto-generated). Dokumen ini ringkasan.
+> Base URL produksi: `https://umkmvarca.renaldi.my.id/api/v1` (dipakai axios `VITE_API_BASE_URL`).
 > 
-> **Changelog v3:** Penambahan Admin Panel — Manajemen Keranjang & Pesanan, Manajemen Produk/Barang, dan Manajemen Karyawan. Seluruh endpoint diselaraskan 100% dengan implementasi Frontend & MSW mock.
+> **Changelog v3:** Penambahan Admin Panel — Manajemen Keranjang & Pesanan, Manajemen Produk/Barang, dan Manajemen Karyawan. Seluruh endpoint diselaraskan 100% dengan implementasi Frontend.
 
 ---
 

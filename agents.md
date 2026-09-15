@@ -1,6 +1,6 @@
 # agents.md — Panduan Teknis untuk AI Agent & Developer
 
-Repository: **website-umkm** (Fullstack Polyrepo: React 19 Frontend + FastAPI Backend).
+Repository: **website-umkm** (Frontend-Only SPA: React 19 + Vite, data via axios ke API produksi eksternal `https://umkmvarca.renaldi.my.id/api/v1`).
 Wajib dibaca dan dipahami sebelum melakukan modifikasi kode pada repositori ini.
 
 ---
@@ -18,7 +18,7 @@ Wajib dibaca dan dipahami sebelum melakukan modifikasi kode pada repositori ini.
 ---
 
 ## 2. Navigasi & Sistem Dwibahasa (i18n)
-- **Modul:** `frontend/src/context/LanguageContext.jsx` menyediakan state bahasa (`id` dan `en`) dengan persistensi `localStorage`.
+- **Modul:** `src/context/LanguageContext.jsx` menyediakan state bahasa (`id` dan `en`) dengan persistensi `localStorage`.
 - **Menu Navigasi Utama:**
   - Indonesia: `Beranda`, `Katalog`, `Tentang`
   - English: `Home`, `Catalog`, `About`
@@ -28,28 +28,19 @@ Wajib dibaca dan dipahami sebelum melakukan modifikasi kode pada repositori ini.
 
 ---
 
-## 3. Arsitektur Backend (FastAPI Domain-Driven)
+## 3. Arsitektur API (Eksternal via Axios)
 
-Backend berada di subdirektori `backend/` dengan struktur modular domain-driven:
-- `app/modules/users/` — Profil pengguna & Clerk user provisioning (`/users/me`).
-- `app/modules/products/` — Katalog produk publik, inventaris admin, update stok, & upload file gambar (`/products`, `/admin/products`).
-- `app/modules/carts/` — Pemantauan keranjang pelanggan oleh customer service & admin (`/admin/carts`).
-- `app/modules/transactions/` — Checkout QRIS, inisiasi transaksi, dan polling status (`/transactions`).
-- `app/modules/orders/` — Manajemen pesanan admin & update status pengiriman (`/admin/orders`).
-- `app/modules/employees/` — Direktori karyawan & manajemen hak akses RBAC (`/admin/employees`).
-- `app/modules/auth/` — Webhook handler Svix (Clerk) dan HMAC (Payment Gateway).
+Backend tidak ada di repo ini. Seluruh data via `src/api/client.js` (axios, `baseURL=https://umkmvarca.renaldi.my.id/api/v1`, interceptor Clerk Bearer + handler 401/403/422):
+- `src/api/products.js` — Katalog publik & CRUD admin (`/products`).
+- `src/api/transactions.js` — Checkout QRIS & polling status (`/transactions`).
+- `src/api/users.js` — Profil (`/users/me`).
+- `src/api/orders.js` — Admin pesanan (`/admin/orders`).
+- `src/api/carts.js` — Admin keranjang (`/admin/carts`).
+- `src/api/employees.js` — Admin karyawan (`/admin/employees`).
+- `src/api/health.js` — Health check (`/health`).
 
-### Dual-Path Mounting:
-Seluruh endpoint di-mount secara ganda di root (`/`) dan prefix versi (`/api/v1`) untuk memastikan kompatibilitas penuh dengan frontend dan API Contract v3.
-
-### 7-Level RBAC Matrix (`app/core/rbac.py`):
-1. `OWNER`: Hak akses penuh ke seluruh modul, termasuk pengubahan role karyawan (`PATCH /admin/employees/{id}/role`).
-2. `ADMIN`: CRUD Produk, Pesanan, Keranjang, dan pendaftaran Karyawan baru.
-3. `STORE MANAGER`: CRUD Produk dan pemantauan Pesanan/Keranjang.
-4. `WAREHOUSE`: Update stok produk (`PATCH /admin/products/{id}/stock`) dan status pesanan (*SHIPPED*).
-5. `CUSTOMER SERVICE`: Read-only pesanan dan keranjang.
-6. `CASHIER`: Checkout & kasir.
-7. `STAFF`: Akses customer standar.
+Kontrak: `API_CONTRACT-3.md`, source of truth `https://umkmvarca.renaldi.my.id/docs`.
+Tanpa MSW/mock dan tanpa fallback dummy — error API diteruskan ke UI.
 
 ---
 
@@ -73,19 +64,11 @@ Seluruh endpoint di-mount secara ganda di root (`/`) dan prefix versi (`/api/v1`
 ## 5. Testing & Quality Gates
 
 Setiap perubahan wajib memenuhi standar berikut:
-1. **Backend Tests:**
+1. **Frontend Build & Lint:**
    ```bash
-   cd backend
-   source .venv/bin/activate
-   pytest -v
-   ```
-   Harus menghasilkan **13/13 passing tests** (100% test coverage).
-2. **Frontend Build & Lint:**
-   ```bash
-   cd frontend
    npm run lint
    npm run build
    ```
    Harus berhasil (*0 errors, 0 warnings*).
-3. **Deployment Vercel:**
-   File `frontend/vercel.json` bertindak sebagai rewrite engine untuk mencegah 404 pada rute langsung SPA.
+2. **Deployment Vercel:**
+   File `vercel.json` bertindak sebagai rewrite engine untuk mencegah 404 pada rute langsung SPA. Root Directory = `.` (repo frontend-only).

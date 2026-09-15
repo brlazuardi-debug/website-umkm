@@ -1,7 +1,8 @@
-# Summary — Website UMKM (VARCA BRAND Fullstack)
+# Summary — Website UMKM (VARCA BRAND Frontend-Only)
 
-> **Status:** ✨ **Production & Presentation Ready (100% Verified Fullstack Web Application)**
+> **Status:** ✨ **Production Ready (Frontend-Only, API produksi eksternal)**
 > **Update Terakhir:** September 2026
+> **API:** `https://umkmvarca.renaldi.my.id/api/v1` (source of truth: `/docs`)
 
 ---
 
@@ -51,13 +52,13 @@
 
 | Komponen | Pengujian | Status | Keterangan |
 | :--- | :--- | :---: | :--- |
-| **Backend API** | `pytest -v` | ✅ **13/13 PASSED** | 100% lulus untuk seluruh modul domain-driven & RBAC security |
 | **Frontend SPA** | `npm run build` | ✅ **0 Errors** | Bundle Vite terkompilasi optimal |
 | **Linter** | `oxlint` | ✅ **Clean** | Kode bersih dari unused import dan syntax warning |
-| **Vercel Deployment** | `frontend/vercel.json` | ✅ **Configured** | SPA rewrite aktif untuk pencegahan 404 pada direct routing |
+| **Vercel Deployment** | `vercel.json` | ✅ **Configured** | SPA rewrite aktif untuk pencegahan 404 pada direct routing, Root Directory `.` |
+| **API Produksi** | `GET /health` via axios | 🔗 **Eksternal** | `https://umkmvarca.renaldi.my.id/api/v1`, tanpa mock/fallback |
 
 ---
 
 ## 3. Struktur Repositori Bersih
 
-Repositori telah dirapikan sehingga hanya menyisakan direktori inti proyek (`frontend/` dan `backend/`), aset visual yang diperlukan (`frontend/src/assets/hero-bg.jpg`), serta dokumen panduan resmi (`API_CONTRACT-3.md`, `README.md`, `agents.md`, `summary.md`).
+Repositori frontend-only di root (`src/`, `public/`, `index.html`, `vite.config.js`, `vercel.json`), aset visual (`src/assets/hero-bg.jpg`), serta dokumen panduan resmi (`API_CONTRACT-3.md`, `README.md`, `agents.md`, `summary.md`). Backend dihapus permanen; folder `frontend/` dipromote ke root.

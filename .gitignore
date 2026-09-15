@@ -1,26 +1,16 @@
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Dependencies / build artifacts (frontend)
+# Dependencies / build artifacts
 node_modules
 dist
 dist-ssr
 *.local
-
-# Python / Backend artifacts
-__pycache__/
-*.py[cod]
-*$py.class
-.venv/
-venv/
-ENV/
-*.db
-*.sqlite3
-.pytest_cache/
-backend/uploads/*
-!backend/uploads/.gitkeep
-backend/umkm.db
+.vercel
 
 # Environment / secrets (jangan pernah commit key Clerk!)
 .env
@@ -29,9 +19,14 @@ backend/umkm.db
 
 # Editor / OS
 .vscode/*
+!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # AI agent / tool directories (not part of project)
 .agent/

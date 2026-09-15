@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'https://umkmvarca.renaldi.my.id/api/v1';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -40,6 +42,7 @@ export const setAuthTokenInterceptor = (getToken) => {
 };
 
 // Response Interceptor untuk penanganan status code error global
+// (tanpa alert agar tidak memblokir UI; biarkan halaman menampilkan error state)
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -48,7 +51,6 @@ apiClient.interceptors.response.use(
       console.warn('Unauthorized request - redirecting to login');
     } else if (status === 403) {
       console.error('Akses Ditolak (403): Tidak memiliki izin.');
-      alert('Akses Ditolak: Anda tidak memiliki izin untuk mengakses halaman ini.');
     } else if (status === 422) {
       console.warn('Validasi input gagal (422):', error.response?.data);
     }

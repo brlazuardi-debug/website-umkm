@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "website-umkm",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -21,14 +21,8 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.13.3",
     "@vitejs/plugin-react": "^6.0.4",
-    "msw": "^2.15.0",
     "oxlint": "^1.75.0",
     "tailwindcss": "^4.3.3",
     "vite": "^8.2.0"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
   }
 }
